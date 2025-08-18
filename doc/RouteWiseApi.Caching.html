@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="project" content="phoenix_backend v0.1.0">
+
+
+    <title>RouteWiseApi.Caching — phoenix_backend v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+
+    <script defer src="dist/sidebar_items-E7F472ED.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-DPJLHKSM.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="https://your-domain.com" class="sidebar-projectName" translate="no">
+phoenix_backend
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of phoenix_backend</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">RouteWiseApi.Caching</span> 
+      <small class="app-vsn" translate="no">(phoenix_backend v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Centralized caching context for the RouteWise API.</p><p>This context provides high-level caching functions that adapt to different
+environments and delegate to appropriate cache backends and domain modules.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#backend/0" data-no-tooltip="" translate="no">backend()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the current cache backend module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#clear_all_cache/0" data-no-tooltip="" translate="no">clear_all_cache()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Clear all cache entries across all categories and backends.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_cache_statistics/0" data-no-tooltip="" translate="no">get_cache_statistics()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get comprehensive cache statistics for monitoring.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_cache_utilization/0" data-no-tooltip="" translate="no">get_cache_utilization()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get cache utilization metrics for monitoring and alerting.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_dashboard_cache/1" data-no-tooltip="" translate="no">get_dashboard_cache(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Dashboard caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_interest_categories_cache/0" data-no-tooltip="" translate="no">get_interest_categories_cache()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Interests caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_place_details_cache/1" data-no-tooltip="" translate="no">get_place_details_cache(place_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Places.get_details_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_places_search_cache/2" data-no-tooltip="" translate="no">get_places_search_cache(query, location)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Places caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_public_trips_cache/0" data-no-tooltip="" translate="no">get_public_trips_cache()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trips caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_route_cache/3" data-no-tooltip="" translate="no">get_route_cache(origin, destination, waypoints)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Routes caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_statistics_cache/0" data-no-tooltip="" translate="no">get_statistics_cache()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Statistics caching operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_trips_cache/1" data-no-tooltip="" translate="no">get_user_trips_cache(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Trips.get_user_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#health_check/0" data-no-tooltip="" translate="no">health_check()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Perform a health check on the caching system.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#invalidate_dashboard_cache/1" data-no-tooltip="" translate="no">invalidate_dashboard_cache(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Dashboard.invalidate_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#invalidate_user_cache/1" data-no-tooltip="" translate="no">invalidate_user_cache(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invalidate all user-specific caches for a given user.
+Useful when user data changes (profile updates, preferences, etc.)</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#invalidate_user_trips_cache/1" data-no-tooltip="" translate="no">invalidate_user_trips_cache(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Trips.invalidate_user_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_dashboard_cache/2" data-no-tooltip="" translate="no">put_dashboard_cache(user_id, data)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Dashboard.put_cache/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_interest_categories_cache/1" data-no-tooltip="" translate="no">put_interest_categories_cache(categories)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Interests.put_categories_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_place_details_cache/2" data-no-tooltip="" translate="no">put_place_details_cache(place_id, details)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Places.put_details_cache/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_places_search_cache/3" data-no-tooltip="" translate="no">put_places_search_cache(query, location, results)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Places.put_search_cache/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_public_trips_cache/1" data-no-tooltip="" translate="no">put_public_trips_cache(trips)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Trips.put_public_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_route_cache/4" data-no-tooltip="" translate="no">put_route_cache(origin, destination, waypoints, route_data)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Routes.put_cache/4</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_statistics_cache/1" data-no-tooltip="" translate="no">put_statistics_cache(stats)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Statistics.put_cache/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_user_trips_cache/2" data-no-tooltip="" translate="no">put_user_trips_cache(user_id, trips)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>See <a><code class="inline">RouteWiseApi.Caching.Trips.put_user_cache/2</code></a>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="backend/0">
+
+  <div class="detail-header">
+    <a href="#backend/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">backend()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L15" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Get the current cache backend module.</p>
+  </section>
+</section>
+<section class="detail" id="clear_all_cache/0">
+
+  <div class="detail-header">
+    <a href="#clear_all_cache/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">clear_all_cache()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L81" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Clear all cache entries across all categories and backends.</p>
+  </section>
+</section>
+<section class="detail" id="get_cache_statistics/0">
+
+  <div class="detail-header">
+    <a href="#get_cache_statistics/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_cache_statistics()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L65" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Get comprehensive cache statistics for monitoring.</p>
+  </section>
+</section>
+<section class="detail" id="get_cache_utilization/0">
+
+  <div class="detail-header">
+    <a href="#get_cache_utilization/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_cache_utilization()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L138" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Get cache utilization metrics for monitoring and alerting.</p>
+  </section>
+</section>
+<section class="detail" id="get_dashboard_cache/1">
+
+  <div class="detail-header">
+    <a href="#get_dashboard_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_dashboard_cache(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L20" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Dashboard caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_interest_categories_cache/0">
+
+  <div class="detail-header">
+    <a href="#get_interest_categories_cache/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_interest_categories_cache()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Interests caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_place_details_cache/1">
+
+  <div class="detail-header">
+    <a href="#get_place_details_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_place_details_cache(place_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L29" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Places.html#get_details_cache/1"><code class="inline">RouteWiseApi.Caching.Places.get_details_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="get_places_search_cache/2">
+
+  <div class="detail-header">
+    <a href="#get_places_search_cache/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_places_search_cache(query, location)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L27" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Places caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_public_trips_cache/0">
+
+  <div class="detail-header">
+    <a href="#get_public_trips_cache/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_public_trips_cache()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L44" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Trips caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_route_cache/3">
+
+  <div class="detail-header">
+    <a href="#get_route_cache/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_route_cache(origin, destination, waypoints)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L35" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Routes caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_statistics_cache/0">
+
+  <div class="detail-header">
+    <a href="#get_statistics_cache/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_statistics_cache()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L59" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Statistics caching operations.</p>
+  </section>
+</section>
+<section class="detail" id="get_user_trips_cache/1">
+
+  <div class="detail-header">
+    <a href="#get_user_trips_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_user_trips_cache(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Trips.html#get_user_cache/1"><code class="inline">RouteWiseApi.Caching.Trips.get_user_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="health_check/0">
+
+  <div class="detail-header">
+    <a href="#health_check/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">health_check()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Perform a health check on the caching system.</p>
+  </section>
+</section>
+<section class="detail" id="invalidate_dashboard_cache/1">
+
+  <div class="detail-header">
+    <a href="#invalidate_dashboard_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">invalidate_dashboard_cache(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L22" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Dashboard.html#invalidate_cache/1"><code class="inline">RouteWiseApi.Caching.Dashboard.invalidate_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="invalidate_user_cache/1">
+
+  <div class="detail-header">
+    <a href="#invalidate_user_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">invalidate_user_cache(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L99" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Invalidate all user-specific caches for a given user.
+Useful when user data changes (profile updates, preferences, etc.)</p>
+  </section>
+</section>
+<section class="detail" id="invalidate_user_trips_cache/1">
+
+  <div class="detail-header">
+    <a href="#invalidate_user_trips_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">invalidate_user_trips_cache(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L48" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Trips.html#invalidate_user_cache/1"><code class="inline">RouteWiseApi.Caching.Trips.invalidate_user_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_dashboard_cache/2">
+
+  <div class="detail-header">
+    <a href="#put_dashboard_cache/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_dashboard_cache(user_id, data)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L21" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Dashboard.html#put_cache/2"><code class="inline">RouteWiseApi.Caching.Dashboard.put_cache/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_interest_categories_cache/1">
+
+  <div class="detail-header">
+    <a href="#put_interest_categories_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_interest_categories_cache(categories)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L54" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Interests.html#put_categories_cache/1"><code class="inline">RouteWiseApi.Caching.Interests.put_categories_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_place_details_cache/2">
+
+  <div class="detail-header">
+    <a href="#put_place_details_cache/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_place_details_cache(place_id, details)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L30" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Places.html#put_details_cache/2"><code class="inline">RouteWiseApi.Caching.Places.put_details_cache/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_places_search_cache/3">
+
+  <div class="detail-header">
+    <a href="#put_places_search_cache/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_places_search_cache(query, location, results)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L28" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Places.html#put_search_cache/3"><code class="inline">RouteWiseApi.Caching.Places.put_search_cache/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_public_trips_cache/1">
+
+  <div class="detail-header">
+    <a href="#put_public_trips_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_public_trips_cache(trips)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L45" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Trips.html#put_public_cache/1"><code class="inline">RouteWiseApi.Caching.Trips.put_public_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_route_cache/4">
+
+  <div class="detail-header">
+    <a href="#put_route_cache/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_route_cache(origin, destination, waypoints, route_data)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L37" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Routes.html#put_cache/4"><code class="inline">RouteWiseApi.Caching.Routes.put_cache/4</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_statistics_cache/1">
+
+  <div class="detail-header">
+    <a href="#put_statistics_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_statistics_cache(stats)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L60" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Statistics.html#put_cache/1"><code class="inline">RouteWiseApi.Caching.Statistics.put_cache/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="put_user_trips_cache/2">
+
+  <div class="detail-header">
+    <a href="#put_user_trips_cache/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_user_trips_cache(user_id, trips)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/caching.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>See <a href="RouteWiseApi.Caching.Trips.html#put_user_cache/2"><code class="inline">RouteWiseApi.Caching.Trips.put_user_cache/2</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="phoenix_backend.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

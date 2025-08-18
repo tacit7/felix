@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="project" content="phoenix_backend v0.1.0">
+
+
+    <title>RouteWiseApi.Caching.Statistics — phoenix_backend v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+
+    <script defer src="dist/sidebar_items-E7F472ED.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-DPJLHKSM.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="https://your-domain.com" class="sidebar-projectName" translate="no">
+phoenix_backend
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of phoenix_backend</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">RouteWiseApi.Caching.Statistics</span> 
+      <small class="app-vsn" translate="no">(phoenix_backend v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/statistics.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Application statistics caching module.</p><p>Provides caching functionality for application-wide statistics and metrics.
+Uses the configured cache backend with appropriate TTL settings for 
+performance monitoring and dashboard data.</p><h2 id="module-features" class="section-heading"><a href="#module-features" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Features</span></h2><ul><li><strong>Performance Caching</strong>: Stores expensive statistical computations</li><li><strong>Dashboard Support</strong>: Cached metrics for monitoring interfaces</li><li><strong>TTL Management</strong>: Configurable expiration for fresh data</li><li><strong>Backend Agnostic</strong>: Works with memory, Redis, or hybrid cache backends</li></ul><h2 id="module-cache-keys" class="section-heading"><a href="#module-cache-keys" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Cache Keys</span></h2><ul><li><code class="inline">stats:application</code> - Application-wide statistics and metrics</li></ul><h2 id="module-ttl-strategy" class="section-heading"><a href="#module-ttl-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">TTL Strategy</span></h2><p>Uses medium TTL (15 minutes) to balance data freshness with performance.
+Statistics are typically expensive to compute but don't change rapidly.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Cache application statistics</span><span class="w">
+</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0855212877-1">%{</span><span class="w">
+  </span><span class="ss">total_users</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w">
+  </span><span class="ss">total_trips</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+  </span><span class="ss">api_calls_today</span><span class="p">:</span><span class="w"> </span><span class="mi">25000</span><span class="w">
+</span><span class="p" data-group-id="0855212877-1">}</span><span class="w">
+</span><span class="nc">RouteWiseApi.Caching.Statistics</span><span class="o">.</span><span class="n">put_cache</span><span class="p" data-group-id="0855212877-2">(</span><span class="n">stats</span><span class="p" data-group-id="0855212877-2">)</span><span class="w">
+
+</span><span class="c1"># Retrieve cached statistics</span><span class="w">
+</span><span class="p" data-group-id="0855212877-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p" data-group-id="0855212877-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RouteWiseApi.Caching.Statistics</span><span class="o">.</span><span class="n">get_cache</span><span class="p" data-group-id="0855212877-4">(</span><span class="p" data-group-id="0855212877-4">)</span></code></pre><h2 id="module-integration" class="section-heading"><a href="#module-integration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration</span></h2><p>Typically used by:</p><ul><li>Admin dashboard endpoints</li><li>Monitoring and alerting systems</li><li>Performance tracking middleware</li><li>API analytics services</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_cache/0" data-no-tooltip="" translate="no">get_cache()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Retrieves cached application statistics.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_cache/1" data-no-tooltip="" translate="no">put_cache(stats)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Caches application statistics with configured TTL.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="get_cache/0">
+
+  <div class="detail-header">
+    <a href="#get_cache/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_cache()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/statistics.ex#L69" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_cache() :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()} | :error</pre>
+
+      </div>
+
+<p>Retrieves cached application statistics.</p><p>Fetches application-wide statistics from the configured cache backend.
+Returns cached metrics for dashboards and monitoring systems.</p><h2 id="get_cache/0-returns" class="section-heading"><a href="#get_cache/0-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, stats}</code> - Cached statistics map</li><li><code class="inline">:error</code> - Cache miss or backend unavailable</li></ul><h2 id="get_cache/0-examples" class="section-heading"><a href="#get_cache/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">RouteWiseApi.Caching.Statistics</span><span class="o">.</span><span class="n">get_cache</span><span class="p" data-group-id="9963281294-1">(</span><span class="p" data-group-id="9963281294-1">)</span><span class="w">
+</span><span class="p" data-group-id="9963281294-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9963281294-3">%{</span><span class="ss">total_users</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="ss">total_trips</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="ss">api_calls_today</span><span class="p">:</span><span class="w"> </span><span class="mi">25000</span><span class="p" data-group-id="9963281294-3">}</span><span class="p" data-group-id="9963281294-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">RouteWiseApi.Caching.Statistics</span><span class="o">.</span><span class="n">get_cache</span><span class="p" data-group-id="9963281294-4">(</span><span class="p" data-group-id="9963281294-4">)</span><span class="w">
+</span><span class="ss">:error</span><span class="w">  </span><span class="c1"># Cache miss</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="put_cache/1">
+
+  <div class="detail-header">
+    <a href="#put_cache/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_cache(stats)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/caching/statistics.ex#L111" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put_cache(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: :ok | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+
+      </div>
+
+<p>Caches application statistics with configured TTL.</p><p>Stores application-wide statistics in the cache backend with medium TTL
+(15 minutes). Used to cache expensive statistical computations.</p><h2 id="put_cache/1-parameters" class="section-heading"><a href="#put_cache/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">stats</code> - Map containing application statistics</li></ul><h2 id="put_cache/1-returns" class="section-heading"><a href="#put_cache/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">:ok</code> - Successfully cached</li><li><code class="inline">{:error, reason}</code> - Cache operation failed</li></ul><h2 id="put_cache/1-statistics-format" class="section-heading"><a href="#put_cache/1-statistics-format" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Statistics Format</span></h2><p>Expected statistics map structure:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6223104541-1">%{</span><span class="w">
+  </span><span class="ss">total_users</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="6223104541-2">(</span><span class="p" data-group-id="6223104541-2">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">total_trips</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="6223104541-3">(</span><span class="p" data-group-id="6223104541-3">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">active_sessions</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="6223104541-4">(</span><span class="p" data-group-id="6223104541-4">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">api_calls_today</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="6223104541-5">(</span><span class="p" data-group-id="6223104541-5">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">average_response_time</span><span class="p">:</span><span class="w"> </span><span class="n">float</span><span class="p" data-group-id="6223104541-6">(</span><span class="p" data-group-id="6223104541-6">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">cache_hit_rate</span><span class="p">:</span><span class="w"> </span><span class="n">float</span><span class="p" data-group-id="6223104541-7">(</span><span class="p" data-group-id="6223104541-7">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">last_updated</span><span class="p">:</span><span class="w"> </span><span class="nc">DateTime</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="6223104541-8">(</span><span class="p" data-group-id="6223104541-8">)</span><span class="w">
+</span><span class="p" data-group-id="6223104541-1">}</span></code></pre><h2 id="put_cache/1-examples" class="section-heading"><a href="#put_cache/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7747688859-1">%{</span><span class="ss">total_users</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="ss">total_trips</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p" data-group-id="7747688859-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">RouteWiseApi.Caching.Statistics</span><span class="o">.</span><span class="n">put_cache</span><span class="p" data-group-id="7747688859-2">(</span><span class="n">stats</span><span class="p" data-group-id="7747688859-2">)</span><span class="w">
+</span><span class="ss">:ok</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="phoenix_backend.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

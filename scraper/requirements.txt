@@ -1,0 +1,22 @@
+# requirements.txt
+httpx[http2,brotli]>=0.24.0
+parsel>=1.6.0
+loguru>=0.6.0
+asyncio
+json
+typing
+urllib3
+
+# Optional: For enhanced scraping
+fake-useragent>=1.2.0
+requests-html>=0.10.0
+
+# For Puppeteer version (if using)
+pyppeteer>=1.0.0
+
+# Installation instructions:
+# pip install -r requirements.txt
+
+# Usage examples:
+# python tripadvisor_scraper.py
+# python tripadvisor_puppeteer.py

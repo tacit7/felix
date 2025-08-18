@@ -1,0 +1,497 @@
+import asyncio
+import json
+import re
+from typing import Dict, List, Optional
+from urllib.parse import urljoin, urlparse
+import time
+
+class TripAdvisorPuppeteerScraper:
+    """
+    TripAdvisor scraper using Puppeteer for JavaScript rendering and better anti-bot evasion
+    """
+    
+    def __init__(self, headless: bool = True, delay: float = 2.0):
+        self.headless = headless
+        self.delay = delay  # Delay between requests
+        self.base_url = "https://www.tripadvisor.com"
+    
+    async def setup_page(self):
+        """Setup a new page with proper configurations"""
+        # Use the puppeteer tool that's available
+        await self.navigate_to_page("https://www.tripadvisor.com")
+        
+        # Set viewport
+        await self.execute_js("""
+            // Set a realistic viewport
+            window.resizeTo(1920, 1080);
+        """)
+        
+        # Add some randomization to avoid detection
+        await self.execute_js("""
+            // Add some mouse movement simulation
+            document.addEventListener('DOMContentLoaded', function() {
+                let mouseEvent = new MouseEvent('mousemove', {
+                    clientX: Math.random() * window.innerWidth,
+                    clientY: Math.random() * window.innerHeight
+                });
+                document.dispatchEvent(mouseEvent);
+            });
+        """)
+    
+    async def navigate_to_page(self, url: str):
+        """Navigate to a specific URL"""
+        from puppeteer import puppeteer_navigate
+        await puppeteer_navigate(url=url, launchOptions={
+            "headless": self.headless,
+            "args": [
+                "--no-sandbox",
+                "--disable-setuid-sandbox", 
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-blink-features=AutomationControlled",
+                "--disable-features=VizDisplayCompositor"
+            ]
+        })
+        
+        # Wait for page to load
+        await asyncio.sleep(self.delay)
+    
+    async def execute_js(self, script: str):
+        """Execute JavaScript code"""
+        from puppeteer import puppeteer_evaluate
+        return await puppeteer_evaluate(script=script)
+    
+    async def click_element(self, selector: str):
+        """Click an element"""
+        from puppeteer import puppeteer_click
+        await puppeteer_click(selector=selector)
+        await asyncio.sleep(1)  # Wait after click
+    
+    async def fill_input(self, selector: str, value: str):
+        """Fill an input field"""
+        from puppeteer import puppeteer_fill
+        await puppeteer_fill(selector=selector, value=value)
+        await asyncio.sleep(0.5)
+    
+    async def get_page_content(self):
+        """Get the current page content"""
+        from puppeteer import puppeteer_evaluate
+        return await puppeteer_evaluate(script="document.documentElement.outerHTML")
+    
+    async def search_hotels(self, location: str) -> List[Dict]:
+        """Search for hotels in a specific location"""
+        print(f"Searching for hotels in: {location}")
+        
+        # Navigate to TripAdvisor
+        await self.navigate_to_page("https://www.tripadvisor.com")
+        
+        # Wait for search box and enter location
+        await asyncio.sleep(3)
+        
+        # Try to find and click the search box
+        search_selectors = [
+            'input[data-test-attribute="typeahead-input"]',
+            'input[placeholder*="search"]',
+            'input[name="q"]',
+            '.typeahead input'
+        ]
+        
+        for selector in search_selectors:
+            try:
+                # Clear and fill the search box
+                await self.execute_js(f"""
+                    const searchBox = document.querySelector('{selector}');
+                    if (searchBox) {{
+                        searchBox.value = '';
+                        searchBox.focus();
+                        searchBox.value = '{location}';
+                        
+                        // Trigger input events
+                        searchBox.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                        searchBox.dispatchEvent(new Event('change', {{ bubbles: true }}));
+                    }}
+                """)
+                
+                await asyncio.sleep(2)
+                
+                # Look for suggestions and click the first one
+                await self.execute_js("""
+                    const suggestions = document.querySelectorAll('[data-test-target="suggestion"]');
+                    if (suggestions.length > 0) {
+                        suggestions[0].click();
+                    }
+                """)
+                
+                await asyncio.sleep(3)
+                break
+                
+            except Exception as e:
+                print(f"Search selector {selector} failed: {e}")
+                continue
+        
+        # Try to navigate to hotels section
+        hotels_selectors = [
+            'a[href*="Hotels"]',
+            'a[data-test-target="hotels"]',
+            'a:contains("Hotels")'
+        ]
+        
+        for selector in hotels_selectors:
+            try:
+                await self.click_element(selector)
+                await asyncio.sleep(3)
+                break
+            except:
+                continue
+        
+        # Extract hotel listings
+        return await self.extract_hotel_listings()
+    
+    async def extract_hotel_listings(self) -> List[Dict]:
+        """Extract hotel listings from the current page"""
+        print("Extracting hotel listings...")
+        
+        hotels = await self.execute_js("""
+            const hotels = [];
+            
+            // Try multiple selectors for hotel cards
+            const selectors = [
+                '[data-automation="hotel-card"]',
+                '.listItem',
+                '.listing',
+                '[data-test-target="hotels-gallery-list-item"]'
+            ];
+            
+            let hotelElements = [];
+            for (const selector of selectors) {
+                hotelElements = document.querySelectorAll(selector);
+                if (hotelElements.length > 0) break;
+            }
+            
+            hotelElements.forEach((element, index) => {
+                try {
+                    // Extract hotel name
+                    let name = '';
+                    const nameSelectors = [
+                        '[data-automation="hotel-card-title"] a',
+                        '.listing_title a',
+                        'h3 a',
+                        'h2 a',
+                        '.property_title a'
+                    ];
+                    
+                    for (const nameSelector of nameSelectors) {
+                        const nameEl = element.querySelector(nameSelector);
+                        if (nameEl) {
+                            name = nameEl.textContent.trim();
+                            break;
+                        }
+                    }
+                    
+                    // Extract URL
+                    let url = '';
+                    const linkSelectors = [
+                        '[data-automation="hotel-card-title"] a',
+                        '.listing_title a',
+                        'h3 a',
+                        'h2 a'
+                    ];
+                    
+                    for (const linkSelector of linkSelectors) {
+                        const linkEl = element.querySelector(linkSelector);
+                        if (linkEl) {
+                            url = linkEl.href;
+                            break;
+                        }
+                    }
+                    
+                    // Extract rating
+                    let rating = null;
+                    const ratingSelectors = [
+                        '[data-test-target="review-rating"] span',
+                        '.ui_bubble_rating',
+                        '[data-automation="reviewsRating"]'
+                    ];
+                    
+                    for (const ratingSelector of ratingSelectors) {
+                        const ratingEl = element.querySelector(ratingSelector);
+                        if (ratingEl) {
+                            const ratingClass = ratingEl.className;
+                            const ratingMatch = ratingClass.match(/bubble_(\d)/);
+                            if (ratingMatch) {
+                                rating = parseInt(ratingMatch[1]);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Extract price
+                    let price = '';
+                    const priceSelectors = [
+                        '[data-automation="hotel-card-price"]',
+                        '.price',
+                        '[data-test-target="price-summary"]'
+                    ];
+                    
+                    for (const priceSelector of priceSelectors) {
+                        const priceEl = element.querySelector(priceSelector);
+                        if (priceEl) {
+                            price = priceEl.textContent.trim();
+                            break;
+                        }
+                    }
+                    
+                    if (name && url) {
+                        hotels.push({
+                            name: name,
+                            url: url,
+                            rating: rating,
+                            price: price,
+                            index: index
+                        });
+                    }
+                } catch (error) {
+                    console.log('Error extracting hotel:', error);
+                }
+            });
+            
+            return hotels;
+        """)
+        
+        print(f"Found {len(hotels)} hotels")
+        return hotels or []
+    
+    async def scrape_hotel_details(self, hotel_url: str) -> Dict:
+        """Scrape detailed information from a hotel page"""
+        print(f"Scraping hotel details: {hotel_url}")
+        
+        # Navigate to hotel page
+        await self.navigate_to_page(hotel_url)
+        await asyncio.sleep(3)
+        
+        # Extract hotel details
+        hotel_data = await self.execute_js("""
+            const hotelData = {
+                name: '',
+                rating: null,
+                reviewCount: 0,
+                address: '',
+                description: '',
+                amenities: [],
+                reviews: [],
+                photos: []
+            };
+            
+            // Extract name
+            const nameSelectors = [
+                'h1[data-test-target="top-info-header"]',
+                'h1.hotels-hotel-review-atf-info-parts-DestinationHeader__heading',
+                'h1',
+                '[data-automation="hotel-name"]'
+            ];
+            
+            for (const selector of nameSelectors) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    hotelData.name = element.textContent.trim();
+                    break;
+                }
+            }
+            
+            // Extract rating and review count
+            const ratingSelectors = [
+                '[data-test-target="review-rating"]',
+                '.hotels-hotel-review-community-content-review-list-parts-ReviewsRatingHeader__rating'
+            ];
+            
+            for (const selector of ratingSelectors) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    const ratingSpan = element.querySelector('span[class*="bubble"]');
+                    if (ratingSpan) {
+                        const ratingClass = ratingSpan.className;
+                        const ratingMatch = ratingClass.match(/bubble_(\d)/);
+                        if (ratingMatch) {
+                            hotelData.rating = parseInt(ratingMatch[1]);
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            // Extract review count
+            const reviewCountElement = document.querySelector('[data-test-target="review-count"]');
+            if (reviewCountElement) {
+                const countText = reviewCountElement.textContent;
+                const countMatch = countText.match(/([\\d,]+)/);
+                if (countMatch) {
+                    hotelData.reviewCount = parseInt(countMatch[1].replace(/,/g, ''));
+                }
+            }
+            
+            // Extract address
+            const addressSelectors = [
+                '[data-test-target="hotel-address"]',
+                '.hotels-hotel-review-atf-info-parts-DestinationHeader__address'
+            ];
+            
+            for (const selector of addressSelectors) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    hotelData.address = element.textContent.trim();
+                    break;
+                }
+            }
+            
+            // Extract description
+            const descriptionSelectors = [
+                '[data-test-target="hotel-description"]',
+                '.hotels-hotel-review-about-with-photos-Hotel--description',
+                '.fIrGe._T'
+            ];
+            
+            for (const selector of descriptionSelectors) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    hotelData.description = element.textContent.trim();
+                    break;
+                }
+            }
+            
+            // Extract amenities
+            const amenityElements = document.querySelectorAll('[data-test-target*="amenity"]');
+            amenityElements.forEach(element => {
+                const amenityText = element.textContent.trim();
+                if (amenityText && !hotelData.amenities.includes(amenityText)) {
+                    hotelData.amenities.push(amenityText);
+                }
+            });
+            
+            // Extract reviews
+            const reviewElements = document.querySelectorAll('[data-reviewid]');
+            reviewElements.forEach(element => {
+                try {
+                    const titleElement = element.querySelector('[data-test-target="review-title"]');
+                    const textElement = element.querySelector('[data-automation*="reviewText"]');
+                    const ratingElement = element.querySelector('[data-test-target="review-rating"] span');
+                    const dateElement = element.querySelector('[class*="date"]');
+                    
+                    const review = {
+                        title: titleElement ? titleElement.textContent.trim() : '',
+                        text: textElement ? textElement.textContent.trim() : '',
+                        rating: null,
+                        date: dateElement ? dateElement.textContent.trim() : ''
+                    };
+                    
+                    if (ratingElement) {
+                        const ratingClass = ratingElement.className;
+                        const ratingMatch = ratingClass.match(/bubble_(\d)/);
+                        if (ratingMatch) {
+                            review.rating = parseInt(ratingMatch[1]);
+                        }
+                    }
+                    
+                    if (review.title || review.text) {
+                        hotelData.reviews.push(review);
+                    }
+                } catch (error) {
+                    console.log('Error extracting review:', error);
+                }
+            });
+            
+            return hotelData;
+        """)
+        
+        return hotel_data or {}
+    
+    async def scrape_location(self, location: str, max_hotels: int = 10) -> List[Dict]:
+        """Complete scraping workflow for a location"""
+        print(f"Starting scrape for location: {location}")
+        
+        try:
+            # Setup the page
+            await self.setup_page()
+            
+            # Search for hotels
+            hotels = await self.search_hotels(location)
+            
+            if not hotels:
+                print("No hotels found")
+                return []
+            
+            # Limit number of hotels
+            hotels = hotels[:max_hotels]
+            
+            # Scrape details for each hotel
+            detailed_hotels = []
+            for i, hotel in enumerate(hotels):
+                print(f"Scraping hotel {i+1}/{len(hotels)}: {hotel['name']}")
+                
+                try:
+                    details = await self.scrape_hotel_details(hotel['url'])
+                    
+                    # Combine preview and detailed data
+                    combined_data = {**hotel, **details}
+                    detailed_hotels.append(combined_data)
+                    
+                    # Add delay between hotels
+                    await asyncio.sleep(self.delay)
+                    
+                except Exception as e:
+                    print(f"Error scraping hotel {hotel['name']}: {e}")
+                    # Add basic data even if details fail
+                    detailed_hotels.append(hotel)
+                    continue
+            
+            return detailed_hotels
+            
+        except Exception as e:
+            print(f"Error during scraping: {e}")
+            return []
+
+# Convenience functions for easy usage
+async def scrape_tripadvisor_hotels(location: str, max_hotels: int = 5, 
+                                  headless: bool = True) -> List[Dict]:
+    """
+    Easy-to-use function to scrape TripAdvisor hotels
+    
+    Args:
+        location: Location to search for (e.g., "Malta", "New York")
+        max_hotels: Maximum number of hotels to scrape
+        headless: Run browser in headless mode
+    
+    Returns:
+        List of hotel dictionaries with detailed information
+    """
+    scraper = TripAdvisorPuppeteerScraper(headless=headless)
+    results = await scraper.scrape_location(location, max_hotels)
+    
+    # Save results
+    filename = f"tripadvisor_{location.lower().replace(' ', '_')}_hotels.json"
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+    
+    print(f"Results saved to {filename}")
+    return results
+
+# Example usage
+async def main():
+    """Example usage of the TripAdvisor scraper"""
+    
+    # Example 1: Basic scraping
+    hotels = await scrape_tripadvisor_hotels(
+        location="Malta",
+        max_hotels=3,
+        headless=True  # Set to False to see browser in action
+    )
+    
+    print(f"\\nScraped {len(hotels)} hotels:")
+    for hotel in hotels:
+        print(f"- {hotel.get('name', 'Unknown')}")
+        print(f"  Rating: {hotel.get('rating', 'N/A')}")
+        print(f"  Reviews: {len(hotel.get('reviews', []))}")
+        print(f"  Amenities: {len(hotel.get('amenities', []))}")
+        print()
+
+if __name__ == "__main__":
+    asyncio.run(main())i

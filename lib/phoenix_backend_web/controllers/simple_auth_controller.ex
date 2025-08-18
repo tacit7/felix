@@ -1,0 +1,1 @@
+# This file has been removed - contained only mock/test authentication endpoints

@@ -1,0 +1,24 @@
+RouteWise POI Database Records
+============================
+Generated: 2025-08-12
+
+Total POIs in database: 3
+
+ID | Name          | Description                    | Category   | Rating | Address                        | Coordinates
+---|---------------|--------------------------------|------------|--------|--------------------------------|------------------
+1  | Central Park  | Large urban park in Manhattan  | attraction | 4.7    | Central Park, New York, NY    | 40.7829, -73.9654
+2  | Times Square  | Famous commercial intersection | attraction | 4.3    | Times Square, New York, NY    | 40.758, -73.9855  
+3  | Joe's Pizza   | Learn more: en:Joe's Pizza     | restaurant | 4.5    | 123 Broadway, New York, NY     | 40.7614, -73.9776
+
+Notes:
+- Joe's Pizza (#3) was just updated using LocationIQ Places API
+- All POIs are currently NYC-based test data
+- The system is ready to populate with real Austin-Dallas route POIs
+- LocationIQ integration can enhance descriptions for future POIs
+
+LocationIQ Description Enhancement Features:
+- Wikipedia references (like Joe's Pizza)
+- Website information extraction  
+- Cuisine type details for restaurants
+- Tourist attraction categorization
+- Amenity-based smart descriptions

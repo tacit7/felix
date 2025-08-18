@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="project" content="phoenix_backend v0.1.0">
+
+
+    <title>API Reference — phoenix_backend v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+
+    <script defer src="dist/sidebar_items-E7F472ED.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-DPJLHKSM.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="https://your-domain.com" class="sidebar-projectName" translate="no">
+phoenix_backend
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of phoenix_backend</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>API Reference <small class="app-vsn">phoenix_backend v#0.1.0</small></h1>
+
+      <a href="https://github.com/your-org/route-wise-backend" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+    <section class="details-list">
+      <h2 id="modules" class="section-heading">Modules</h2>
+      <div class="summary">
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.html" translate="no">RouteWiseApi</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>RouteWiseApi keeps the contexts that define your domain
+and business logic.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Accounts.html" translate="no">RouteWiseApi.Accounts</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Accounts context for user management and authentication.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Accounts.User.html" translate="no">RouteWiseApi.Accounts.User</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Application.html" translate="no">RouteWiseApi.Application</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The RouteWise API application module.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Cache.html" translate="no">RouteWiseApi.Cache</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>In-memory cache GenServer with TTL support and automatic cleanup.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.html" translate="no">RouteWiseApi.Caching</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Centralized caching context for the RouteWise API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Backend.html" translate="no">RouteWiseApi.Caching.Backend</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Behavior definition for cache backends following OTP patterns.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Backend.Hybrid.html" translate="no">RouteWiseApi.Caching.Backend.Hybrid</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Hybrid cache backend combining L1 (memory) and L2 (Redis) caches.
+Implements intelligent cache promotion/demotion and distributed invalidation.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Backend.Memory.html" translate="no">RouteWiseApi.Caching.Backend.Memory</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>In-memory cache backend using the existing RouteWiseApi.Cache GenServer.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Backend.Redis.html" translate="no">RouteWiseApi.Caching.Backend.Redis</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Redis cache backend with connection pooling and fault tolerance.
+Includes automatic failover to memory cache when Redis unavailable.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Config.html" translate="no">RouteWiseApi.Caching.Config</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Environment-aware cache configuration management.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Dashboard.html" translate="no">RouteWiseApi.Caching.Dashboard</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Dashboard-specific caching operations with user-aware TTL strategies.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Interests.html" translate="no">RouteWiseApi.Caching.Interests</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Interest categories and user interests caching.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Places.html" translate="no">RouteWiseApi.Caching.Places</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Google Places API caching with location-based cache keys.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Routes.html" translate="no">RouteWiseApi.Caching.Routes</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Route calculation caching for Google Directions API responses.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Statistics.html" translate="no">RouteWiseApi.Caching.Statistics</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Application statistics caching module.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Caching.Trips.html" translate="no">RouteWiseApi.Caching.Trips</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Trip data caching for public and user-specific trips.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.GoogleDirections.html" translate="no">RouteWiseApi.GoogleDirections</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Google Directions API client for route calculations.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.GooglePlaces.html" translate="no">RouteWiseApi.GooglePlaces</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Google Places API client for searching places, getting details, and autocomplete.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Guardian.html" translate="no">RouteWiseApi.Guardian</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Guardian configuration for JWT token management in the RouteWise API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Guardian.Plug.html" translate="no">RouteWiseApi.Guardian.Plug</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Integrations.ExpressClient.html" translate="no">RouteWiseApi.Integrations.ExpressClient</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>HTTP client for communicating with Express.js user interests service.
+Handles connection pooling, timeouts, and error recovery.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Interests.html" translate="no">RouteWiseApi.Interests</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Interests context - handles interest categories and user interests.
+This is a convenience module that delegates to the Trips context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Mailer.html" translate="no">RouteWiseApi.Mailer</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.POI.html" translate="no">RouteWiseApi.POI</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The POI context - handles Points of Interest.
+This is a convenience module that delegates to the Trips context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Places.html" translate="no">RouteWiseApi.Places</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Places context for managing place data and Google Places API integration.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Places.Place.html" translate="no">RouteWiseApi.Places.Place</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.PlacesService.html" translate="no">RouteWiseApi.PlacesService</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Service for managing places with intelligent caching and Google Places API integration.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Repo.html" translate="no">RouteWiseApi.Repo</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.RouteService.html" translate="no">RouteWiseApi.RouteService</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Service layer for route calculations and trip planning.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Trips.html" translate="no">RouteWiseApi.Trips</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Trips context - handles trip management, user interests, and POIs.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Trips.InterestCategory.html" translate="no">RouteWiseApi.Trips.InterestCategory</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Trips.POI.html" translate="no">RouteWiseApi.Trips.POI</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Trips.Trip.html" translate="no">RouteWiseApi.Trips.Trip</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApi.Trips.UserInterest.html" translate="no">RouteWiseApi.Trips.UserInterest</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.html" translate="no">RouteWiseApiWeb</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The entrypoint for defining your web interface, such
+as controllers, components, channels, and so on.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.AuthController.html" translate="no">RouteWiseApiWeb.AuthController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.AuthErrorHandler.html" translate="no">RouteWiseApiWeb.AuthErrorHandler</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.ChangesetJSON.html" translate="no">RouteWiseApiWeb.ChangesetJSON</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.DashboardController.html" translate="no">RouteWiseApiWeb.DashboardController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Endpoint.html" translate="no">RouteWiseApiWeb.Endpoint</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.ErrorJSON.html" translate="no">RouteWiseApiWeb.ErrorJSON</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module is invoked by your endpoint in case of errors on JSON requests.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.FallbackController.html" translate="no">RouteWiseApiWeb.FallbackController</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Translates controller action results into valid <a><code class="inline">Plug.Conn</code></a> responses.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Gettext.html" translate="no">RouteWiseApiWeb.Gettext</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A module providing Internationalization with a gettext-based API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.HealthController.html" translate="no">RouteWiseApiWeb.HealthController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.InterestsController.html" translate="no">RouteWiseApiWeb.InterestsController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.InterestsJSON.html" translate="no">RouteWiseApiWeb.InterestsJSON</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.MonitoringController.html" translate="no">RouteWiseApiWeb.MonitoringController</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>API endpoint for backend integration monitoring and health checks.
+Provides detailed metrics about Express.js integration performance.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.POIController.html" translate="no">RouteWiseApiWeb.POIController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.POIJSON.html" translate="no">RouteWiseApiWeb.POIJSON</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.PlacesController.html" translate="no">RouteWiseApiWeb.PlacesController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.PlacesJSON.html" translate="no">RouteWiseApiWeb.PlacesJSON</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Plugs.AuthPlug.html" translate="no">RouteWiseApiWeb.Plugs.AuthPlug</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Authentication plugs for handling JWT tokens and user authentication.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Plugs.UnifiedAuth.html" translate="no">RouteWiseApiWeb.Plugs.UnifiedAuth</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Unified authentication plug that handles both Phoenix Guardian tokens
+and Express.js JWT tokens for cross-system compatibility.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Router.html" translate="no">RouteWiseApiWeb.Router</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.RoutesController.html" translate="no">RouteWiseApiWeb.RoutesController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.RoutesJSON.html" translate="no">RouteWiseApiWeb.RoutesJSON</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.SimpleAuthController.html" translate="no">RouteWiseApiWeb.SimpleAuthController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.Telemetry.html" translate="no">RouteWiseApiWeb.Telemetry</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.TripsController.html" translate="no">RouteWiseApiWeb.TripsController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RouteWiseApiWeb.TripsJSON.html" translate="no">RouteWiseApiWeb.TripsJSON</a>
+
+  </div>
+
+</div>
+
+      </div>
+    </section>
+
+
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="phoenix_backend.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

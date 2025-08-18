@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="project" content="phoenix_backend v0.1.0">
+
+
+    <title>RouteWiseApi.Trips — phoenix_backend v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+
+    <script defer src="dist/sidebar_items-E7F472ED.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-DPJLHKSM.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="https://your-domain.com" class="sidebar-projectName" translate="no">
+phoenix_backend
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of phoenix_backend</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">RouteWiseApi.Trips</span> 
+      <small class="app-vsn" translate="no">(phoenix_backend v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>The Trips context - handles trip management, user interests, and POIs.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_poi/2" data-no-tooltip="" translate="no">change_poi(poi, attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking POI changes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_trip/2" data-no-tooltip="" translate="no">change_trip(trip, attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking trip changes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#count_user_trips/1" data-no-tooltip="" translate="no">count_user_trips(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the count of trips for a specific user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_interest_category/1" data-no-tooltip="" translate="no">create_interest_category(attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates an interest category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_poi/1" data-no-tooltip="" translate="no">create_poi(attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a POI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_poi_from_google_place/2" data-no-tooltip="" translate="no">create_poi_from_google_place(place_data, time_from_start \\ &quot;0 hours&quot;)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a POI from Google Places data.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_trip/1" data-no-tooltip="" translate="no">create_trip(attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a trip.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_trip_from_wizard/2" data-no-tooltip="" translate="no">create_trip_from_wizard(wizard_data, user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a trip from trip wizard data.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_user_interest/1" data-no-tooltip="" translate="no">create_user_interest(attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a user interest.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_user_interests_from_names/3" data-no-tooltip="" translate="no">create_user_interests_from_names(category_names, user_id, priority \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates user interests from category names.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_interest_category/1" data-no-tooltip="" translate="no">delete_interest_category(interest_category)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes an interest category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_poi/1" data-no-tooltip="" translate="no">delete_poi(poi)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes a POI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_trip/1" data-no-tooltip="" translate="no">delete_trip(trip)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes a trip.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_user_interest/1" data-no-tooltip="" translate="no">delete_user_interest(user_interest)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes a user interest.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_interest_category!/1" data-no-tooltip="" translate="no">get_interest_category!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single interest category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_interest_category_by_name/1" data-no-tooltip="" translate="no">get_interest_category_by_name(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets an interest category by name.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_poi/1" data-no-tooltip="" translate="no">get_poi(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single POI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_poi!/1" data-no-tooltip="" translate="no">get_poi!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single POI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_trip/1" data-no-tooltip="" translate="no">get_trip(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single trip.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_trip!/1" data-no-tooltip="" translate="no">get_trip!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single trip.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_interest/2" data-no-tooltip="" translate="no">get_user_interest(user_id, category_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a user interest by user and category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_interest!/1" data-no-tooltip="" translate="no">get_user_interest!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single user interest.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_interests/1" data-no-tooltip="" translate="no">get_user_interests(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of user interests for a specific user.
+Alias for compatibility with dashboard controller.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_trip/2" data-no-tooltip="" translate="no">get_user_trip(id, user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a trip by ID and user ID (for authorization).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_interest_categories/0" data-no-tooltip="" translate="no">list_interest_categories()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of interest categories.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_pois/0" data-no-tooltip="" translate="no">list_pois()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of POIs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_pois_by_category/1" data-no-tooltip="" translate="no">list_pois_by_category(category)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of POIs by category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_public_trips/0" data-no-tooltip="" translate="no">list_public_trips()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of public trips.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_trips/0" data-no-tooltip="" translate="no">list_trips()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of trips.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_user_interests/1" data-no-tooltip="" translate="no">list_user_interests(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of user interests for a specific user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_user_trips/1" data-no-tooltip="" translate="no">list_user_trips(user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of trips for a specific user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#seed_interest_categories/0" data-no-tooltip="" translate="no">seed_interest_categories()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Seeds the database with default interest categories.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_interest_category/2" data-no-tooltip="" translate="no">update_interest_category(interest_category, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates an interest category.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_poi/2" data-no-tooltip="" translate="no">update_poi(poi, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a POI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_trip/2" data-no-tooltip="" translate="no">update_trip(trip, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a trip.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_user_interest/2" data-no-tooltip="" translate="no">update_user_interest(user_interest, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a user interest.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="change_poi/2">
+
+    <span id="change_poi/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_poi/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">change_poi(poi, attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking POI changes.</p>
+  </section>
+</section>
+<section class="detail" id="change_trip/2">
+
+    <span id="change_trip/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_trip/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">change_trip(trip, attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L95" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking trip changes.</p>
+  </section>
+</section>
+<section class="detail" id="count_user_trips/1">
+
+  <div class="detail-header">
+    <a href="#count_user_trips/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">count_user_trips(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L316" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the count of trips for a specific user.</p>
+  </section>
+</section>
+<section class="detail" id="create_interest_category/1">
+
+    <span id="create_interest_category/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_interest_category/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_interest_category(attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L126" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates an interest category.</p>
+  </section>
+</section>
+<section class="detail" id="create_poi/1">
+
+    <span id="create_poi/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_poi/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_poi(attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L274" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a POI.</p>
+  </section>
+</section>
+<section class="detail" id="create_poi_from_google_place/2">
+
+    <span id="create_poi_from_google_place/1"></span>
+
+  <div class="detail-header">
+    <a href="#create_poi_from_google_place/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_poi_from_google_place(place_data, time_from_start \\ &quot;0 hours&quot;)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L283" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a POI from Google Places data.</p>
+  </section>
+</section>
+<section class="detail" id="create_trip/1">
+
+    <span id="create_trip/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_trip/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_trip(attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L62" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a trip.</p>
+  </section>
+</section>
+<section class="detail" id="create_trip_from_wizard/2">
+
+  <div class="detail-header">
+    <a href="#create_trip_from_wizard/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_trip_from_wizard(wizard_data, user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L71" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a trip from trip wizard data.</p>
+  </section>
+</section>
+<section class="detail" id="create_user_interest/1">
+
+    <span id="create_user_interest/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_user_interest/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_user_interest(attrs \\ %{})</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L193" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a user interest.</p>
+  </section>
+</section>
+<section class="detail" id="create_user_interests_from_names/3">
+
+    <span id="create_user_interests_from_names/2"></span>
+
+  <div class="detail-header">
+    <a href="#create_user_interests_from_names/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_user_interests_from_names(category_names, user_id, priority \\ 1)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L202" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates user interests from category names.</p>
+  </section>
+</section>
+<section class="detail" id="delete_interest_category/1">
+
+  <div class="detail-header">
+    <a href="#delete_interest_category/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_interest_category(interest_category)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L144" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes an interest category.</p>
+  </section>
+</section>
+<section class="detail" id="delete_poi/1">
+
+  <div class="detail-header">
+    <a href="#delete_poi/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_poi(poi)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L300" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a POI.</p>
+  </section>
+</section>
+<section class="detail" id="delete_trip/1">
+
+  <div class="detail-header">
+    <a href="#delete_trip/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_trip(trip)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L88" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a trip.</p>
+  </section>
+</section>
+<section class="detail" id="delete_user_interest/1">
+
+  <div class="detail-header">
+    <a href="#delete_user_interest/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_user_interest(user_interest)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L238" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a user interest.</p>
+  </section>
+</section>
+<section class="detail" id="get_interest_category!/1">
+
+  <div class="detail-header">
+    <a href="#get_interest_category!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_interest_category!(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L114" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single interest category.</p>
+  </section>
+</section>
+<section class="detail" id="get_interest_category_by_name/1">
+
+  <div class="detail-header">
+    <a href="#get_interest_category_by_name/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_interest_category_by_name(name)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L119" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets an interest category by name.</p>
+  </section>
+</section>
+<section class="detail" id="get_poi/1">
+
+  <div class="detail-header">
+    <a href="#get_poi/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_poi(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L269" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single POI.</p>
+  </section>
+</section>
+<section class="detail" id="get_poi!/1">
+
+  <div class="detail-header">
+    <a href="#get_poi!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_poi!(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L264" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single POI.</p>
+  </section>
+</section>
+<section class="detail" id="get_trip/1">
+
+  <div class="detail-header">
+    <a href="#get_trip/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_trip(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L48" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single trip.</p>
+  </section>
+</section>
+<section class="detail" id="get_trip!/1">
+
+  <div class="detail-header">
+    <a href="#get_trip!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_trip!(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L43" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single trip.</p>
+  </section>
+</section>
+<section class="detail" id="get_user_interest/2">
+
+  <div class="detail-header">
+    <a href="#get_user_interest/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_user_interest(user_id, category_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L184" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a user interest by user and category.</p>
+  </section>
+</section>
+<section class="detail" id="get_user_interest!/1">
+
+  <div class="detail-header">
+    <a href="#get_user_interest!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_user_interest!(id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L179" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single user interest.</p>
+  </section>
+</section>
+<section class="detail" id="get_user_interests/1">
+
+  <div class="detail-header">
+    <a href="#get_user_interests/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_user_interests(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L326" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of user interests for a specific user.
+Alias for compatibility with dashboard controller.</p>
+  </section>
+</section>
+<section class="detail" id="get_user_trip/2">
+
+  <div class="detail-header">
+    <a href="#get_user_trip/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_user_trip(id, user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a trip by ID and user ID (for authorization).</p>
+  </section>
+</section>
+<section class="detail" id="list_interest_categories/0">
+
+  <div class="detail-header">
+    <a href="#list_interest_categories/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_interest_categories()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of interest categories.</p>
+  </section>
+</section>
+<section class="detail" id="list_pois/0">
+
+  <div class="detail-header">
+    <a href="#list_pois/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_pois()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L247" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of POIs.</p>
+  </section>
+</section>
+<section class="detail" id="list_pois_by_category/1">
+
+  <div class="detail-header">
+    <a href="#list_pois_by_category/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_pois_by_category(category)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L254" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of POIs by category.</p>
+  </section>
+</section>
+<section class="detail" id="list_public_trips/0">
+
+  <div class="detail-header">
+    <a href="#list_public_trips/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_public_trips()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L33" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of public trips.</p>
+  </section>
+</section>
+<section class="detail" id="list_trips/0">
+
+  <div class="detail-header">
+    <a href="#list_trips/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_trips()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L16" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of trips.</p>
+  </section>
+</section>
+<section class="detail" id="list_user_interests/1">
+
+  <div class="detail-header">
+    <a href="#list_user_interests/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_user_interests(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L167" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of user interests for a specific user.</p>
+  </section>
+</section>
+<section class="detail" id="list_user_trips/1">
+
+  <div class="detail-header">
+    <a href="#list_user_trips/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_user_trips(user_id)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L23" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of trips for a specific user.</p>
+  </section>
+</section>
+<section class="detail" id="seed_interest_categories/0">
+
+  <div class="detail-header">
+    <a href="#seed_interest_categories/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">seed_interest_categories()</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L151" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Seeds the database with default interest categories.</p>
+  </section>
+</section>
+<section class="detail" id="update_interest_category/2">
+
+  <div class="detail-header">
+    <a href="#update_interest_category/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">update_interest_category(interest_category, attrs)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Updates an interest category.</p>
+  </section>
+</section>
+<section class="detail" id="update_poi/2">
+
+  <div class="detail-header">
+    <a href="#update_poi/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">update_poi(poi, attrs)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L291" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a POI.</p>
+  </section>
+</section>
+<section class="detail" id="update_trip/2">
+
+  <div class="detail-header">
+    <a href="#update_trip/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">update_trip(trip, attrs)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L79" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a trip.</p>
+  </section>
+</section>
+<section class="detail" id="update_user_interest/2">
+
+  <div class="detail-header">
+    <a href="#update_user_interest/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">update_user_interest(user_interest, attrs)</h1>
+
+
+        <a href="https://github.com/your-org/route-wise-backend/blob/main/lib/phoenix_backend/trips.ex#L229" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a user interest.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="phoenix_backend.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

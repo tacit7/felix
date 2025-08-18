@@ -1,0 +1,12 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f9fafb"/>
+  <rect x="25" y="25" width="250" height="250" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="2"/>
+  <circle cx="150" cy="120" r="25" fill="#d1d5db"/>
+  <rect x="125" y="135" width="50" height="35" fill="#d1d5db"/>
+  <text x="150" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">
+    Image Not Found
+  </text>
+  <text x="150" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#d1d5db">
+    Default Placeholder
+  </text>
+</svg>

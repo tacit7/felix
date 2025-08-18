@@ -1,0 +1,61 @@
+RouteWise Database Analysis - Places vs POIs
+==========================================
+Generated: 2025-08-12
+
+SUMMARY:
+========
+Places Table (Google Places Cache): 1,297 records - Real data from Explorer API calls
+POIs Table (Trip POIs):              3 records    - NYC test data only
+
+The Explorer page IS saving data - it goes to the 'places' table, not 'pois' table!
+
+RECENT PLACES DATA (Last 10 from Explorer API):
+===============================================
+ID   | Name                                                   | Types                                      | Rating | Address
+-----|--------------------------------------------------------|--------------------------------------------|--------|------------------------------------------
+2174 | Residence Inn Temple                                   | {establishment,lodging,point_of_interest} | 4.20   | 4301 S General Bruce Dr, Temple, TX 76502, USA
+2173 | Best Western Plus Waco North                           | {establishment,lodging,point_of_interest} | 4.10   | 1502 I-35, Bellmead, TX 76705, USA
+2172 | Fairfield Inn & Suites Waco South                      | {establishment,lodging,point_of_interest} | 4.10   | 5805 Woodway Dr, Woodway, TX 76712, USA
+2167 | Robinson Inn and Suites                                | {establishment,lodging,point_of_interest} | 2.90   | 1167 Sun Valley Blvd, Robinson, TX 76706, USA
+2170 | Residence Inn Waco                                     | {establishment,lodging,point_of_interest} | 4.20   | 501 S University Parks Dr, Waco, TX 76706, USA
+2166 | Extended Stay America - Waco - Woodway                 | {establishment,lodging,point_of_interest} | 3.50   | 5903 Woodway Dr, Waco, TX 76712, USA
+2168 | SpringHill Suites Waco Woodway                         | {establishment,lodging,point_of_interest} | 4.50   | 200 Colonnade Pkwy, Woodway, TX 76712, USA
+2165 | La Quinta Inn by Wyndham Temple                        | {establishment,lodging,point_of_interest} | 3.60   | 1604 W Barton Ave, Temple, TX 76504, USA
+2171 | La Quinta Inn & Suites by Wyndham Woodway - Waco South | {establishment,lodging,point_of_interest} | 4.30   | 6003 Woodway Dr, Woodway, TX 76712, USA
+2169 | Knights Inn Franklin Ave Waco                          | {establishment,lodging,point_of_interest} | 3.90   | 3829 Franklin Ave, Waco, TX 76710, USA
+
+POI DATA (Trip-specific POIs):
+==============================
+ID | Name         | Description                    | Category   | Rating | Address                        | Coordinates
+---|--------------|--------------------------------|------------|--------|--------------------------------|------------------
+1  | Central Park | Large urban park in Manhattan  | attraction | 4.7    | Central Park, New York, NY    | 40.7829, -73.9654
+2  | Times Square | Famous commercial intersection | attraction | 4.3    | Times Square, New York, NY    | 40.758, -73.9855  
+3  | Joe's Pizza  | Learn more: en:Joe's Pizza     | restaurant | 4.5    | 123 Broadway, New York, NY     | 40.7614, -73.9776
+
+ARCHITECTURE EXPLANATION:
+==========================
+1. **places** table: Google Places API cache for general location searches
+   - Used by Explorer page (/api/explore-results)
+   - Used by Route Results page (/api/route-results) 
+   - Cached Google Places data with full metadata
+   - 1,297 real Texas locations from your searches
+
+2. **pois** table: Trip-specific points of interest
+   - Used for individual trip planning
+   - Contains only 3 NYC test records
+   - More focused structure for trip itineraries
+   - Enhanced with LocationIQ descriptions
+
+LOCATIONIQ INTEGRATION STATUS:
+==============================
+✅ LocationIQ Places API added to LocationIQ module
+✅ Mix task created: mix update_poi_descriptions
+✅ Tested successfully on Joe's Pizza (Wikipedia reference)
+✅ Ready to enhance both 'places' and 'pois' descriptions
+
+NEXT STEPS:
+===========
+- LocationIQ can enhance descriptions in BOTH tables
+- Explorer data (1,297 places) ready for description enhancement  
+- POI data (3 records) can be expanded with trip-specific locations
+- Consider creating conversion task: places -> pois for trip planning
