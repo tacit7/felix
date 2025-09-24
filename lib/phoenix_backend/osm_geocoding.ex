@@ -163,7 +163,7 @@ defmodule RouteWiseApi.OSMGeocoding do
         }
         
         city
-        |> RouteWiseApi.Places.City.changeset(update_attrs)
+        |> RouteWiseApi.Places.Location.changeset(update_attrs)
         |> RouteWiseApi.Repo.update()
         
       {:error, reason} ->

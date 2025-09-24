@@ -7,7 +7,7 @@ defmodule RouteWiseApi.Places do
   require Logger
   alias RouteWiseApi.Repo
   alias RouteWiseApi.Places.Place
-  alias RouteWiseApi.Places.City
+  alias RouteWiseApi.Places.Location
   alias RouteWiseApi.Places.CachedPlace
 
   @doc """
@@ -354,10 +354,10 @@ defmodule RouteWiseApi.Places do
         lat: p.latitude,
         lng: p.longitude,
         name: p.name,
-        category: fragment("?[1]", p.place_types),  # Get first place type as category
+        category: fragment("?[1]", p.categories),  # Get first place type as category
         rating: p.rating,
         reviews_count: p.reviews_count,
-        place_types: p.place_types,
+        categories: p.categories,
         formatted_address: p.formatted_address,
         price_level: p.price_level
       }
@@ -379,7 +379,7 @@ defmodule RouteWiseApi.Places do
       {:categories, categories}, acc ->
         if is_list(categories) do
           from p in acc,
-            where: fragment("? && ?", p.place_types, ^categories)
+            where: fragment("? && ?", p.categories, ^categories)
         else
           acc
         end
@@ -430,7 +430,7 @@ defmodule RouteWiseApi.Places do
     lng_delta = radius / (111_320 * :math.cos(location.lat * :math.pi() / 180))
 
     from(p in Place,
-      where: ^place_type in p.place_types,
+      where: ^place_type in p.categories,
       where: p.latitude >= ^(location.lat - lat_delta),
       where: p.latitude <= ^(location.lat + lat_delta),
       where: p.longitude >= ^(location.lng - lng_delta),
@@ -450,13 +450,13 @@ defmodule RouteWiseApi.Places do
   
   - `location` - Map with :lat and :lng coordinates
   - `radius_meters` - Search radius in meters (default: 5000)
-  - `filters` - Optional filters (place_types, min_rating, etc.)
+  - `filters` - Optional filters (categories, min_rating, etc.)
   - `limit` - Maximum results (default: 50)
   
   ## Examples
   
       location = %{lat: 30.2672, lng: -97.7431}  # Austin, TX
-      places = find_nearby_places(location, 2000, %{place_types: ["restaurant"]}, 20)
+      places = find_nearby_places(location, 2000, %{categories: ["restaurant"]}, 20)
       
   ## Returns
   
@@ -473,7 +473,7 @@ defmodule RouteWiseApi.Places do
         formatted_address: p.formatted_address,
         latitude: p.latitude,
         longitude: p.longitude,
-        place_types: p.place_types,
+        categories: p.categories,
         rating: p.rating,
         price_level: p.price_level,
         reviews_count: p.reviews_count,
@@ -528,7 +528,7 @@ defmodule RouteWiseApi.Places do
         formatted_address: p.formatted_address,
         latitude: p.latitude,
         longitude: p.longitude,
-        place_types: p.place_types,
+        categories: p.categories,
         rating: p.rating,
         price_level: p.price_level,
         reviews_count: p.reviews_count,
@@ -560,7 +560,7 @@ defmodule RouteWiseApi.Places do
   ## Examples
   
       route = [{-97.7431, 30.2672}, {-97.5431, 30.1672}]  # Austin to somewhere
-      places = find_places_near_route(route, 2000, %{place_types: ["gas_station"]})
+      places = find_places_near_route(route, 2000, %{categories: ["gas_station"]})
       
   ## Returns
   
@@ -578,7 +578,7 @@ defmodule RouteWiseApi.Places do
         formatted_address: p.formatted_address,
         latitude: p.latitude,
         longitude: p.longitude,
-        place_types: p.place_types,
+        categories: p.categories,
         rating: p.rating,
         price_level: p.price_level,
         reviews_count: p.reviews_count,
@@ -600,11 +600,11 @@ defmodule RouteWiseApi.Places do
   
   defp apply_place_filters(query, filters) do
     Enum.reduce(filters, query, fn
-      {:place_types, types}, acc when is_list(types) ->
-        from p in acc, where: fragment("? && ?", p.place_types, ^types)
+      {:categories, types}, acc when is_list(types) ->
+        from p in acc, where: fragment("? && ?", p.categories, ^types)
       
       {:place_type, type}, acc when is_binary(type) ->
-        from p in acc, where: ^type in p.place_types
+        from p in acc, where: ^type in p.categories
         
       {:min_rating, rating}, acc when is_number(rating) ->
         from p in acc, where: p.rating >= ^rating
@@ -712,7 +712,7 @@ defmodule RouteWiseApi.Places do
       |> String.split(",")
       |> Enum.map(&String.trim/1)
     
-    from(c in City,
+    from(c in Location,
       where: ilike(c.name, ^"%#{original_query}%") or 
              ilike(c.display_name, ^"%#{original_query}%") or
              ilike(c.normalized_name, ^"%#{normalized_query}%"),
@@ -746,10 +746,10 @@ defmodule RouteWiseApi.Places do
   end
 
   defp get_or_create_city(api_result) do
-    case Repo.get_by(City, location_iq_place_id: api_result.place_id) do
+    case Repo.get_by(Location, location_iq_place_id: api_result.place_id) do
       nil ->
-        %City{}
-        |> City.changeset(api_result_to_attrs(api_result))
+        %Location{}
+        |> Location.changeset(api_result_to_attrs(api_result))
         |> Repo.insert()
       existing_city ->
         {:ok, existing_city}
@@ -758,7 +758,7 @@ defmodule RouteWiseApi.Places do
 
   defp increment_search_count(city) do
     city
-    |> City.changeset(%{
+    |> Location.changeset(%{
       search_count: city.search_count + 1,
       last_searched_at: DateTime.utc_now()
     })

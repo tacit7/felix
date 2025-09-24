@@ -11,7 +11,7 @@ defmodule RouteWiseApi.GoogleGeocoding do
   
   require Logger
   alias RouteWiseApi.{Places, Repo}
-  alias RouteWiseApi.Places.City
+  alias RouteWiseApi.Places.Location
 
   @base_url "https://maps.googleapis.com/maps/api/geocode/json"
 
@@ -218,14 +218,14 @@ defmodule RouteWiseApi.GoogleGeocoding do
           last_searched_at: DateTime.utc_now()
         }
         
-        %City{}
-        |> City.changeset(city_attrs)
+        %Location{}
+        |> Location.changeset(city_attrs)
         |> Repo.insert()
         
       existing_city ->
         # Update search count
         existing_city
-        |> City.changeset(%{
+        |> Location.changeset(%{
           search_count: existing_city.search_count + 1,
           last_searched_at: DateTime.utc_now()
         })

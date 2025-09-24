@@ -20,7 +20,7 @@ defmodule RouteWiseApi.LocationDisambiguation do
   """
   
   alias RouteWiseApi.{Places, Repo, GoogleGeocoding}
-  alias RouteWiseApi.Places.City
+  alias RouteWiseApi.Places.Location
   import Ecto.Query
   require Logger
 
@@ -195,7 +195,7 @@ defmodule RouteWiseApi.LocationDisambiguation do
     city_name = extract_city_name(normalized_query)
     
     # Search database for all cities with this name
-    cities = from(c in City,
+    cities = from(c in Location,
       where: ilike(c.name, ^"%#{city_name}%") or 
              ilike(c.normalized_name, ^"%#{city_name}%"),
       order_by: [

@@ -10,7 +10,7 @@ defmodule RouteWiseApi.GeocodeService do
   """
   
   alias RouteWiseApi.{Places, LocationDisambiguation, Repo}
-  alias RouteWiseApi.Places.City
+  alias RouteWiseApi.Places.Location
   
   require Logger
   require RouteWiseApi.Assert
@@ -290,7 +290,7 @@ defmodule RouteWiseApi.GeocodeService do
         last_searched_at: DateTime.utc_now()
       }
       
-      case Repo.insert(City.changeset(%City{}, city_attrs)) do
+      case Repo.insert(Location.changeset(%Location{}, city_attrs)) do
         {:ok, city} ->
           Logger.info("💾 Saved new location to database: #{city.name}")
         {:error, changeset} ->
