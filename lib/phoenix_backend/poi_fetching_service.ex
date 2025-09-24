@@ -63,6 +63,34 @@ defmodule RouteWiseApi.POIFetchingService do
   end
   
   @doc """
+  Fetch POIs for specific coordinates.
+  """
+  @spec fetch_pois_for_coordinates(float(), float(), map()) :: {:ok, [map()]} | {:error, String.t()}
+  def fetch_pois_for_coordinates(lat, lon, params \\ %{}) when is_float(lat) and is_float(lon) do
+    pre!(lat >= -90.0 and lat <= 90.0, "Latitude must be valid coordinate")
+    pre!(lon >= -180.0 and lon <= 180.0, "Longitude must be valid coordinate")
+
+    options = parse_options(params)
+    coordinates = %{lat: lat, lng: lon}
+
+    case options.source do
+      :google ->
+        # Use the Google Places API directly with coordinates
+        fetch_google_places_api(coordinates.lat, coordinates.lng, options.radius)
+      :osm ->
+        fetch_osm_pois_by_coordinates(coordinates, options)
+      :database ->
+        fetch_database_pois_by_coordinates(coordinates, options)
+      :auto ->
+        fetch_pois_by_coordinates_with_fallback(coordinates, options)
+    end
+  rescue
+    error ->
+      Logger.error("Exception in fetch_pois_for_coordinates: #{Exception.message(error)}")
+      {:error, "Failed to fetch POIs: #{Exception.message(error)}"}
+  end
+
+  @doc """
   Fetch POIs for cached place using coordinates.
   """
   @spec fetch_pois_for_cached_place(map(), map()) :: {:ok, [map()]} | {:error, String.t()}
@@ -143,15 +171,17 @@ defmodule RouteWiseApi.POIFetchingService do
   
   defp fetch_pois_with_smart_fallback(location, options) do
     Logger.info("🔄 Smart fallback strategy for #{location}")
-    
+
     # Try database first
     case fetch_database_pois_for_location(location, options) do
       {:ok, database_pois} when length(database_pois) >= 15 ->
         Logger.info("🎯 Using #{length(database_pois)} database POIs (excellent coverage)")
+        Logger.info("  ✅ Database POIs sufficient (≥15), skipping external APIs")
         {:ok, database_pois}
-        
+
       {:ok, database_pois} ->
         Logger.info("📍 Database has #{length(database_pois)} POIs, fetching Google Places for coverage")
+        Logger.info("  ⚠️  Database POI count (#{length(database_pois)}) below threshold (15), combining with external APIs")
         
         case fetch_google_pois_for_location(location, options) do
           {:ok, google_pois} when length(google_pois) > 0 ->
@@ -169,8 +199,11 @@ defmodule RouteWiseApi.POIFetchingService do
               error -> error
             end
         end
-        
-      error -> error
+
+      {:error, reason} = error ->
+        Logger.warn("❌ Database POI fetch failed for #{location}: #{inspect(reason)}")
+        Logger.info("  🔄 Falling back to Google Places API only")
+        fetch_google_pois_for_location(location, options)
     end
   end
   
@@ -365,7 +398,7 @@ defmodule RouteWiseApi.POIFetchingService do
       formatted_address: Map.get(poi, :address),
       latitude: TypeUtils.ensure_decimal(Map.get(poi, :lat)),
       longitude: TypeUtils.ensure_decimal(Map.get(poi, :lng)),
-      place_types: Map.get(poi, :place_types, []),
+      categories: Map.get(poi, :place_types, []),
       rating: TypeUtils.ensure_decimal(Map.get(poi, :rating)),
       price_level: Map.get(poi, :price_level),
       phone_number: Map.get(poi, :phone),
@@ -442,31 +475,21 @@ defmodule RouteWiseApi.POIFetchingService do
     category in ["restaurant", "accommodation", "attraction", "shopping", "service", "all"]
   end
 
-  @doc """
-  Calculate search radius from city bounds when available.
-  
-  Returns radius in meters for territory/region-appropriate POI coverage.
-  Uses OSM bounds or calculated radius data to determine appropriate search area.
-  
-  ## Examples
-      iex> calculate_radius_from_city_bounds(%{search_radius_meters: 158215})
-      158215
-      
-      iex> calculate_radius_from_city_bounds(%{bbox_north: 18.67, bbox_south: 17.73})
-      ~104000  # ~104km calculated from bounds span
-  """
+  # Calculate search radius from city bounds when available.
+  # Returns radius in meters for territory/region-appropriate POI coverage.
+  # Uses OSM bounds or calculated radius data to determine appropriate search area.
   @spec calculate_radius_from_city_bounds(map()) :: integer() | nil
   defp calculate_radius_from_city_bounds(city) do
     cond do
       # Use precomputed search radius (preferred - based on actual geographic analysis)
-      city.search_radius_meters && city.search_radius_meters > 0 ->
+      Map.get(city, :search_radius_meters) && Map.get(city, :search_radius_meters) > 0 ->
         # Clamp to reasonable POI search limits
-        min(city.search_radius_meters, 200_000)  # Max 200km
-        
+        min(Map.get(city, :search_radius_meters), 200_000)  # Max 200km
+
       # Calculate from OSM bounding box
       has_complete_bbox?(city) ->
         calculate_radius_from_bbox(city)
-        
+
       # No bounds data available
       true ->
         nil
@@ -474,17 +497,17 @@ defmodule RouteWiseApi.POIFetchingService do
   end
 
   defp has_complete_bbox?(city) do
-    not is_nil(city.bbox_north) and not is_nil(city.bbox_south) and
-    not is_nil(city.bbox_east) and not is_nil(city.bbox_west)
+    not is_nil(Map.get(city, :bbox_north)) and not is_nil(Map.get(city, :bbox_south)) and
+    not is_nil(Map.get(city, :bbox_east)) and not is_nil(Map.get(city, :bbox_west))
   end
 
   defp calculate_radius_from_bbox(city) do
     try do
       # Convert to floats for calculation
-      north = TypeUtils.ensure_float(city.bbox_north)
-      south = TypeUtils.ensure_float(city.bbox_south)
-      east = TypeUtils.ensure_float(city.bbox_east)
-      west = TypeUtils.ensure_float(city.bbox_west)
+      north = TypeUtils.ensure_float(Map.get(city, :bbox_north))
+      south = TypeUtils.ensure_float(Map.get(city, :bbox_south))
+      east = TypeUtils.ensure_float(Map.get(city, :bbox_east))
+      west = TypeUtils.ensure_float(Map.get(city, :bbox_west))
       
       # Calculate spans in degrees
       lat_span = north - south
@@ -505,12 +528,12 @@ defmodule RouteWiseApi.POIFetchingService do
       # Apply reasonable limits for POI searches
       clamped_radius = min(max(radius_meters, 5_000), 200_000)  # 5km to 200km
       
-      Logger.debug("📏 Calculated radius for #{city.name}: #{clamped_radius}m from bbox (#{lat_span}° × #{lng_span}°)")
+      Logger.debug("📏 Calculated radius for #{Map.get(city, :name, "location")}: #{clamped_radius}m from bbox (#{lat_span}° × #{lng_span}°)")
       
       clamped_radius
     rescue
       error ->
-        Logger.warning("⚠️ Failed to calculate radius from bbox for #{city.name}: #{inspect(error)}")
+        Logger.warning("⚠️ Failed to calculate radius from bbox for #{Map.get(city, :name, "location")}: #{inspect(error)}")
         nil
     end
   end

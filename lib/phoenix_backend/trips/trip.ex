@@ -72,10 +72,11 @@ defmodule RouteWiseApi.Trips.Trip do
       # Sharing fields
       :is_shareable, :allow_public_edit, :require_approval_for_edits, :max_collaborators
     ])
-    |> validate_required([:title, :start_city, :end_city, :user_id])
+    |> validate_required([:title, :user_id])
+    |> validate_required_cities()
     |> validate_length(:title, min: 1, max: 255)
-    |> validate_length(:start_city, min: 1, max: 255)
-    |> validate_length(:end_city, min: 1, max: 255)
+    |> validate_conditional_length(:start_city, min: 1, max: 255)
+    |> validate_conditional_length(:end_city, min: 1, max: 255)
     |> validate_inclusion(:trip_type, [
       "road-trip", "day-trip", "weekend-getaway", "vacation", "business", 
       "adventure", "cultural", "food-tour", "nature", "urban-exploration", 
@@ -216,22 +217,46 @@ defmodule RouteWiseApi.Trips.Trip do
 
   defp validate_trip_tags(changeset) do
     tags = get_field(changeset, :trip_tags)
-    
+
     if tags && is_list(tags) do
       valid_tags = [
-        "family-friendly", "budget", "luxury", "adventure", "cultural", 
+        "family-friendly", "budget", "luxury", "adventure", "cultural",
         "food-focused", "nature", "urban", "romantic", "solo", "group",
         "accessible", "photography", "historical", "beach", "mountain",
         "desert", "winter", "summer"
       ]
-      
+
       invalid_tags = Enum.reject(tags, &(&1 in valid_tags))
-      
+
       if Enum.empty?(invalid_tags) do
         changeset
       else
         add_error(changeset, :trip_tags, "contains invalid tags: #{Enum.join(invalid_tags, ", ")}")
       end
+    else
+      changeset
+    end
+  end
+
+  defp validate_required_cities(changeset) do
+    trip_type = get_field(changeset, :trip_type)
+
+    case trip_type do
+      "explore" ->
+        # For explore trips, cities are not required
+        changeset
+      _ ->
+        # For all other trip types, require start_city and end_city
+        changeset
+        |> validate_required([:start_city, :end_city])
+    end
+  end
+
+  defp validate_conditional_length(changeset, field, opts) do
+    value = get_field(changeset, field)
+
+    if value && value != "" do
+      validate_length(changeset, field, opts)
     else
       changeset
     end

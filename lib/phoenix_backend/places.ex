@@ -317,7 +317,7 @@ defmodule RouteWiseApi.Places do
     |> where([p], p.latitude <= ^(location.lat + lat_delta))
     |> where([p], p.longitude >= ^(location.lng - lng_delta))
     |> where([p], p.longitude <= ^(location.lng + lng_delta))
-    |> order_by([p], desc: p.rating, desc: p.reviews_count)
+    |> order_by([p], desc: p.curated, desc: p.rating, desc: p.reviews_count)  # Prioritize curated places first
     |> Repo.all()
   end
 

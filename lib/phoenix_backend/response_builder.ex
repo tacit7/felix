@@ -18,17 +18,33 @@ defmodule RouteWiseApi.ResponseBuilder do
   """
   def build_explore_response(pois, formatted_pois, location_name, location_data, additional_meta) do
     maps_api_key = get_maps_api_key()
-    
+
     # Determine cache status for the response
     cache_info = CacheService.determine_explore_results_cache_status(pois)
-    
+
     base_meta = %{
       total_pois: length(pois),
       location: location_name,
       maps_available: not is_nil(maps_api_key),
       bounds_source: location_data && location_data.bounds_source
     }
-    
+
+    # Extract rich geographic context from location_data
+    location_context = if location_data do
+      %{
+        state: location_data.state,
+        country: location_data.country,
+        country_code: location_data.country_code,
+        formatted_address: location_data.formatted_address,
+        display_name: location_data.display_name,
+        metadata: location_data.metadata
+      }
+      |> Enum.reject(fn {_, v} -> is_nil(v) end)  # Remove nil values
+      |> Enum.into(%{})
+    else
+      %{}
+    end
+
     response = %{
       success: true,
       data: %{
@@ -36,12 +52,15 @@ defmodule RouteWiseApi.ResponseBuilder do
         location: location_name,
         location_coords: location_data && location_data.coords,
         bounds: location_data && location_data.bounds,
+        # Include rich geographic context
+        location_context: location_context,
         maps_api_key: maps_api_key,
         meta: Map.merge(base_meta, additional_meta)
       },
       timestamp: DateTime.utc_now() |> DateTime.to_iso8601()
     }
-    
+
+
     # Add cache metadata in development
     maybe_add_cache_metadata(response, cache_info)
   end

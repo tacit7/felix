@@ -28,7 +28,7 @@ defmodule RouteWiseApi.POIFormatterService do
     %{
       id: "google_#{google_place["place_id"]}",
       name: google_place["name"],
-      place_types: google_place["types"] || [],
+      categories: google_place["types"] || [],
       lat: TypeUtils.ensure_float(google_place["geometry"]["location"]["lat"]),
       lng: TypeUtils.ensure_float(google_place["geometry"]["location"]["lng"]),
       rating: google_place["rating"],
@@ -114,6 +114,23 @@ defmodule RouteWiseApi.POIFormatterService do
   """
   @spec format_poi_for_response(map()) :: map()
   def format_poi_for_response(%{} = poi) do
+    # Extract categories from both possible fields - handle Ecto struct vs map
+    raw_categories = cond do
+      # For Ecto struct (from database)
+      Map.has_key?(poi, :__struct__) and is_list(Map.get(poi, :categories)) ->
+        Map.get(poi, :categories, [])
+      # For API data with place_types
+      is_list(Map.get(poi, :place_types)) ->
+        Map.get(poi, :place_types, [])
+      # For map data with categories
+      is_list(Map.get(poi, :categories)) ->
+        Map.get(poi, :categories, [])
+      # Fallback
+      true ->
+        []
+    end
+
+    Logger.info("🐛 EXTRACTED CATEGORIES for #{Map.get(poi, :name)}: #{inspect(raw_categories)}")
     %{
       # Core identification
       id: Map.get(poi, :id),
@@ -138,9 +155,9 @@ defmodule RouteWiseApi.POIFormatterService do
       phoneNumber: Map.get(poi, :phone_number),
       website: Map.get(poi, :website),
       
-      # Categories - preserve raw place types
-      placeTypes: Map.get(poi, :place_types, []),
-      categories: format_place_types_to_readable(Map.get(poi, :place_types, [])),  # Frontend expects readable categories
+      # Categories - preserve raw place types (check both field names for compatibility)
+      placeTypes: raw_categories,
+      categories: format_categories_to_readable(raw_categories),  # Frontend expects readable categories
       
       # Operational data
       openingHours: Map.get(poi, :opening_hours),
@@ -150,7 +167,7 @@ defmodule RouteWiseApi.POIFormatterService do
       # Images and media
       imageUrl: get_place_image(poi),
       images: generate_poi_images(Map.get(poi, :id)),
-      categoryIcon: generate_category_icon_url(get_fallback_category(Map.get(poi, :place_types, []))),
+      categoryIcon: generate_category_icon_url(get_fallback_category(raw_categories)),
       wikiImage: Map.get(poi, :wiki_image),
       
       # External integrations
@@ -422,8 +439,8 @@ defmodule RouteWiseApi.POIFormatterService do
   end
   defp has_valid_coordinates?(_), do: false
   
-  defp format_place_types_to_readable([]), do: []
-  defp format_place_types_to_readable(place_types) when is_list(place_types) do
+  defp format_categories_to_readable([]), do: []
+  defp format_categories_to_readable(place_types) when is_list(place_types) do
     place_types
     |> Enum.map(fn type ->
       # Use the existing get_readable_type function but handle individual types

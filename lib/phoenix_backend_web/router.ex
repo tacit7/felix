@@ -56,7 +56,7 @@ defmodule RouteWiseApiWeb.Router do
     
     # Development only - mock authentication
     if Mix.env() == :dev do
-      post "/mock", AuthController, :mock_auth
+      get "/mock", AuthController, :mock_auth
     end
 
     # Google OAuth initiation
@@ -195,6 +195,7 @@ defmodule RouteWiseApiWeb.Router do
     # Trip management endpoints (authentication required)
     resources("/trips", TripsController, except: [:new, :edit])
     post "/trips/from_wizard", TripsController, :create_from_wizard
+    post "/trips/explore", TripsController, :explore
     
     # Trip sharing endpoints (authentication required)
     post "/trips/:id/share", TripSharingController, :share_trip

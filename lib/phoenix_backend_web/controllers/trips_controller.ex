@@ -5,6 +5,8 @@ defmodule RouteWiseApiWeb.TripsController do
   alias RouteWiseApi.Trips.Trip
   alias RouteWiseApi.RouteService
 
+  require Logger
+
   action_fallback RouteWiseApiWeb.FallbackController
 
   @doc """
@@ -28,23 +30,29 @@ defmodule RouteWiseApiWeb.TripsController do
   POST /api/trips - Create a new trip (requires authentication)
   """
   def create(conn, params) do
-    case params do
-      %{"trip" => trip_params} ->
-        current_user = conn.assigns.current_user
-        trip_params = Map.put(trip_params, "user_id", current_user.id)
+    current_user = conn.assigns.current_user
 
-        with {:ok, %Trip{} = trip} <- Trips.create_trip(trip_params) do
-          conn
-          |> put_status(:created)
-          |> put_resp_header("location", ~p"/api/trips/#{trip}")
-          |> render(:show, trip: trip)
-        end
-        
+    # Handle both wrapped (%{"trip" => data}) and unwrapped data for flexibility
+    trip_params = case params do
+      %{"trip" => trip_data} ->
+        trip_data
       _ ->
-        Logger.error("🚨 Expected 'trip' key in params, got: #{inspect(Map.keys(params))}")
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Expected 'trip' key in request body", received_keys: Map.keys(params)})
+        # If no "trip" wrapper, assume the params are the trip data directly
+        # Remove any auth-related keys that shouldn't be in trip data
+        Map.drop(params, ["_csrf_token", "_format"])
+    end
+
+    # Convert frontend field names to backend field names
+    trip_params = trip_params
+    |> map_frontend_field_names()
+
+    trip_params = Map.put(trip_params, "user_id", current_user.id)
+
+    with {:ok, %Trip{} = trip} <- Trips.create_trip(trip_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", ~p"/api/trips/#{trip}")
+      |> render(:show, trip: trip)
     end
   end
 
@@ -61,6 +69,28 @@ defmodule RouteWiseApiWeb.TripsController do
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/trips/#{trip}")
       |> render(:show, trip: updated_trip)
+    end
+  end
+
+  @doc """
+  POST /api/trips/explore - Create trip from explore data
+  """
+  def explore(conn, params) do
+    current_user = conn.assigns.current_user
+
+    case validate_explore_params(params) do
+      {:ok, validated_params} ->
+        with {:ok, %Trip{} = trip} <- Trips.create_explore_trip(validated_params, current_user.id) do
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", ~p"/api/trips/#{trip}")
+          |> render(:show, trip: trip)
+        end
+
+      {:error, message} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: message})
     end
   end
 
@@ -141,6 +171,57 @@ defmodule RouteWiseApiWeb.TripsController do
 
   defp maybe_calculate_route(trip, _wizard_data, false) do
     {:ok, trip}
+  end
+
+  defp validate_explore_params(params) do
+    location = params["location"]
+    discovered_place_ids = params["discovered_place_ids"] || []
+    include_user_saved = params["include_user_saved"] || false
+    title = params["title"]
+    duration_days = params["duration_days"] || 1
+
+    cond do
+      is_nil(location) or location == "" ->
+        {:error, "Location is required"}
+
+      not is_list(discovered_place_ids) ->
+        {:error, "discovered_place_ids must be an array"}
+
+      not is_boolean(include_user_saved) ->
+        {:error, "include_user_saved must be a boolean"}
+
+      not is_nil(duration_days) and (not is_integer(duration_days) or duration_days < 1) ->
+        {:error, "duration_days must be a positive integer"}
+
+      true ->
+        {:ok, %{
+          location: location,
+          discovered_place_ids: discovered_place_ids,
+          include_user_saved: include_user_saved,
+          title: title,
+          duration_days: duration_days
+        }}
+    end
+  end
+
+  defp map_frontend_field_names(params) do
+    params
+    |> Map.put("trip_type", params["tripType"] || params["trip_type"])
+    |> Map.delete("tripType")
+    |> transform_pois_data()
+  end
+
+  defp transform_pois_data(params) do
+    case params["pois_data"] do
+      pois when is_list(pois) ->
+        # Convert POI array to expected map structure
+        Map.put(params, "pois_data", %{
+          "discovered_places" => pois,
+          "created_from" => "explore"
+        })
+      _ ->
+        params
+    end
   end
 
 end

@@ -88,6 +88,14 @@ defmodule RouteWiseApi.Trips do
   end
 
   @doc """
+  Creates a trip from explore data with discovered places and user saved places.
+  """
+  def create_explore_trip(explore_params, user_id) do
+    attrs = build_explore_trip_attrs(explore_params, user_id)
+    create_trip(attrs)
+  end
+
+  @doc """
   Updates a trip.
   """
   def update_trip(%Trip{} = trip, attrs) do
@@ -585,5 +593,52 @@ defmodule RouteWiseApi.Trips do
       where: c.trip_id == ^trip_id and c.user_id == ^user_id and c.status == "accepted"
     )
     |> Repo.exists?()
+  end
+
+  defp build_explore_trip_attrs(%{
+    location: location,
+    discovered_place_ids: discovered_place_ids,
+    include_user_saved: include_user_saved,
+    title: title,
+    duration_days: _duration_days
+  }, user_id) do
+    # Get user's saved places in the area if requested
+    user_saved_place_ids = if include_user_saved do
+      get_user_saved_places_near_location(user_id, location)
+    else
+      []
+    end
+
+    # Generate title if not provided
+    trip_title = title || "Exploring #{location}"
+
+    # Build POI data structure combining discovered and user saved places
+    pois_data = %{
+      "discovered_places" => discovered_place_ids,
+      "user_saved_places" => user_saved_place_ids,
+      "location" => location,
+      "created_from" => "explore"
+    }
+
+    %{
+      title: trip_title,
+      start_city: location,
+      end_city: location,
+      trip_type: "explore",
+      pois_data: pois_data,
+      is_public: false,
+      user_id: user_id,
+      difficulty_level: "easy",
+      trip_tags: ["explore", "discovery"],
+      status: "planning",
+      last_modified_by_user_at: DateTime.utc_now()
+    }
+  end
+
+  defp get_user_saved_places_near_location(_user_id, _location) do
+    # TODO: Implement logic to find user's saved places near the location
+    # For now, return empty list
+    # This could query a user_saved_places table or similar
+    []
   end
 end
