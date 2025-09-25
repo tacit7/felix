@@ -214,13 +214,17 @@ defmodule RouteWiseApiWeb.TripsController do
   defp transform_pois_data(params) do
     case params["pois_data"] do
       pois when is_list(pois) ->
-        # Convert POI array to expected map structure
+        # Convert POI array to expected map structure for explore trips
         Map.put(params, "pois_data", %{
           "discovered_places" => pois,
           "created_from" => "explore"
         })
-      _ ->
+      pois when is_map(pois) ->
+        # Already in correct format
         params
+      _ ->
+        # No POI data or invalid format
+        Map.put(params, "pois_data", %{})
     end
   end
 

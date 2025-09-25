@@ -495,6 +495,9 @@ defmodule RouteWiseApi.POIFormatterService do
       "gas_station" -> "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&h=300&fit=crop"
       "lodging" -> "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
       "shopping" -> "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop"
+      "beach" -> "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop"
+      "park" -> "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"
+      "attraction" -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
       _ -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
     end
   end
