@@ -105,7 +105,7 @@ defmodule RouteWiseApi.POIFormatterService do
       # Image system integration
       imageUrl: get_osm_category_image(category),
       images: generate_poi_images("osm_#{Map.get(osm_place, :osm_id)}_#{Map.get(osm_place, :osm_type)}"),
-      categoryIcon: generate_category_icon_url(get_fallback_category(place_types))
+      categoryIcon: generate_category_icon_url(get_primary_category(place_types))
     }
   end
   
@@ -167,8 +167,9 @@ defmodule RouteWiseApi.POIFormatterService do
       # Images and media
       imageUrl: get_place_image(poi),
       images: generate_poi_images(Map.get(poi, :id)),
-      categoryIcon: generate_category_icon_url(get_fallback_category(raw_categories)),
+      categoryIcon: generate_category_icon_url(get_primary_category(raw_categories)),
       wikiImage: Map.get(poi, :wiki_image),
+      defaultImage: get_default_image_data(poi),
       
       # External integrations
       tripadvisorUrl: Map.get(poi, :tripadvisor_url),
@@ -302,22 +303,10 @@ defmodule RouteWiseApi.POIFormatterService do
   defp parse_osm_opening_hours(_), do: nil
   
   defp get_osm_category_image(category) do
-    case category do
-      "restaurant" -> "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop"
-      "cafe" -> "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop"
-      "hotel" -> "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
-      "attraction" -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
-      "shop" -> "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop"
-      "bank" -> "https://images.unsplash.com/photo-1541354329998-f4d9a9f9297f?w=400&h=300&fit=crop"
-      "hospital" -> "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400&h=300&fit=crop"
-      "school" -> "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&h=300&fit=crop"
-      "church" -> "https://images.unsplash.com/photo-1520637836862-4d197d17c2a4?w=400&h=300&fit=crop"
-      "park" -> "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"
-      "museum" -> "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"
-      "gas_station" -> "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&h=300&fit=crop"
-      "pharmacy" -> "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=300&fit=crop"
-      "grocery" -> "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=300&fit=crop"
-      _ -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
+    # Use database-based default image lookup for OSM categories
+    case RouteWiseApi.Places.DefaultImageService.get_default_image_url([category]) do
+      {:ok, url} -> url
+      :error -> "/api/images/fallbacks/poi-placeholder.svg"  # Final fallback
     end
   end
   
@@ -458,49 +447,60 @@ defmodule RouteWiseApi.POIFormatterService do
     |> Enum.reject(&is_nil/1)
   end
 
-  defp get_fallback_category([]), do: "attraction"
-  defp get_fallback_category(place_types) when is_list(place_types) do
-    cond do
-      "restaurant" in place_types or "food" in place_types -> "restaurant"
-      "lodging" in place_types -> "lodging"
-      "beach" in place_types or "natural_feature" in place_types -> "beach"
-      "park" in place_types or "national_park" in place_types -> "park"
-      "bar" in place_types or "night_club" in place_types -> "nightlife"
-      "shopping_mall" in place_types or "store" in place_types -> "shopping"
-      "gas_station" in place_types -> "gas_station"
-      true -> "attraction"
-    end
-  end
-  defp get_fallback_category(_), do: "attraction"
   
   defp get_place_image(poi) do
+    # Priority 1: Google Places photos
+    case get_google_place_photo(poi) do
+      {:ok, url} -> url
+      :error ->
+        # Priority 2: Wiki image
+        case Map.get(poi, :wiki_image) do
+          wiki_url when is_binary(wiki_url) and wiki_url != "" -> wiki_url
+          _ ->
+            # Priority 3: Default image from database
+            case get_default_image_url(poi) do
+              {:ok, url} -> url
+              :error ->
+                # Priority 4: Final fallback
+                "/api/images/fallbacks/poi-placeholder.svg"
+            end
+        end
+    end
+  end
+
+  defp get_google_place_photo(poi) do
     case Map.get(poi, :photos) do
       [first_photo | _] when is_map(first_photo) ->
         photo_ref = Map.get(first_photo, "photo_reference")
         if photo_ref do
           maps_api_key = System.get_env("GOOGLE_MAPS_API_KEY")
-          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{maps_api_key}"
+          {:ok, "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{maps_api_key}"}
         else
-          get_fallback_image(poi)
+          :error
         end
       _ ->
-        get_fallback_image(poi)
+        :error
     end
   end
-  
-  defp get_fallback_image(poi) do
-    category = get_fallback_category(Map.get(poi, :place_types, []))
-    case category do
-      "restaurant" -> "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop"
-      "gas_station" -> "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&h=300&fit=crop"
-      "lodging" -> "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
-      "shopping" -> "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop"
-      "beach" -> "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop"
-      "park" -> "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"
-      "attraction" -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
-      _ -> "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop"
+
+  defp get_default_image_url(poi) do
+    categories = get_poi_categories(poi)
+    # Normalize categories to lowercase for case-insensitive matching
+    normalized_categories = Enum.map(categories, &String.downcase/1)
+    RouteWiseApi.Places.DefaultImageService.get_default_image_url(normalized_categories)
+  end
+
+  defp get_primary_category(categories) when is_list(categories) do
+    # Get the category that has a matching default image, or fall back to first category
+    # Normalize categories to lowercase for case-insensitive matching
+    normalized_categories = Enum.map(categories, &String.downcase/1)
+    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(normalized_categories) do
+      %{category: category} when not is_nil(category) -> category
+      _ -> List.first(categories) || "establishment"
     end
   end
+
+  defp get_primary_category(_), do: "establishment"
   
   defp get_opening_status(poi) do
     case Map.get(poi, :opening_hours) do
@@ -557,6 +557,61 @@ defmodule RouteWiseApi.POIFormatterService do
       Map.get(poi, :location_iq_place_id) -> "location_iq"
       Map.get(poi, :tripadvisor_url) -> "tripadvisor"
       true -> "manual"
+    end
+  end
+
+  defp get_default_image_data(poi) do
+    # Priority 1: Use preloaded default_image association (database POIs)
+    case Map.get(poi, :default_image) do
+      %{} = default_image ->
+        %{
+          id: Map.get(default_image, :id),
+          category: Map.get(default_image, :category),
+          imageUrl: Map.get(default_image, :image_url),
+          fallbackUrl: Map.get(default_image, :fallback_url),
+          description: Map.get(default_image, :description),
+          source: Map.get(default_image, :source)
+        }
+      _ ->
+        # Priority 2: Category-based fallback for external POIs
+        get_category_based_default_image(poi)
+    end
+  end
+
+  defp get_category_based_default_image(poi) do
+    categories = get_poi_categories(poi)
+
+    # Normalize categories to lowercase for case-insensitive matching
+    normalized_categories = Enum.map(categories, &String.downcase/1)
+
+    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(normalized_categories) do
+      %RouteWiseApi.Places.DefaultImage{} = default_image ->
+        %{
+          id: default_image.id,
+          category: default_image.category,
+          imageUrl: default_image.image_url,
+          fallbackUrl: default_image.fallback_url,
+          description: default_image.description,
+          source: default_image.source
+        }
+      nil -> nil
+    end
+  end
+
+  defp get_poi_categories(poi) do
+    cond do
+      # Database place with struct categories
+      Map.has_key?(poi, :__struct__) and is_list(Map.get(poi, :categories)) ->
+        Map.get(poi, :categories, [])
+      # API data with place_types
+      is_list(Map.get(poi, :place_types)) ->
+        Map.get(poi, :place_types, [])
+      # Map data with categories
+      is_list(Map.get(poi, :categories)) ->
+        Map.get(poi, :categories, [])
+      # Fallback
+      true ->
+        []
     end
   end
   
