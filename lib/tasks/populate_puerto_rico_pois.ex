@@ -28,7 +28,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Vieques, PR",
         latitude: 18.0979,
         longitude: -65.5043,
-        place_types: ["natural_feature", "tourist_attraction"],
+        categories: ["natural_feature", "tourist_attraction"],
         rating: 4.8,
         description: "World-class bioluminescent lagoon framed by mangroves. Guided night paddles reveal neon-blue trails with every stroke.",
         tips: [
@@ -48,7 +48,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Culebra, PR",
         latitude: 18.3117,
         longitude: -65.3200,
-        place_types: ["natural_feature", "tourist_attraction", "beach"],
+        categories: ["natural_feature", "tourist_attraction", "beach"],
         rating: 4.9,
         description: "Horseshoe bay of turquoise water and powdery sand. Snorkel near reefs and the iconic rusted tank.",
         tips: [
@@ -68,7 +68,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Old San Juan, PR 00901",
         latitude: 18.4707,
         longitude: -66.1247,
-        place_types: ["tourist_attraction", "museum", "historical_landmark"],
+        categories: ["tourist_attraction", "museum", "historical_landmark"],
         rating: 4.7,
         description: "16th-century Spanish fortress guarding San Juan Bay. Sweeping lawns, ocean vistas, and layered ramparts to explore.",
         tips: [
@@ -88,7 +88,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Old San Juan, PR 00901",
         latitude: 18.4695,
         longitude: -66.1195,
-        place_types: ["tourist_attraction", "museum", "historical_landmark"],
+        categories: ["tourist_attraction", "museum", "historical_landmark"],
         rating: 4.7,
         description: "UNESCO district of walls, bastions, and twin forts. Cobblestones, colonial facades, and panoramic walks above the sea.",
         tips: [
@@ -108,7 +108,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Fajardo, PR",
         latitude: 18.3789,
         longitude: -65.6283,
-        place_types: ["natural_feature", "tourist_attraction"],
+        categories: ["natural_feature", "tourist_attraction"],
         rating: 4.5,
         description: "Mangrove channel leading to a glowing lagoon. Kayak under dark skies to watch plankton spark to life.",
         tips: [
@@ -128,7 +128,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Vieques, PR",
         latitude: 18.0959,
         longitude: -65.3939,
-        place_types: ["natural_feature", "beach"],
+        categories: ["natural_feature", "beach"],
         rating: 4.8,
         description: "Long, wild strand inside the wildlife refuge. Clear, calm water and off-the-grid feel; bring your own shade.",
         tips: [
@@ -148,7 +148,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Puerto Rico",
         latitude: 18.3119,
         longitude: -65.7884,
-        place_types: ["park", "natural_feature", "tourist_attraction"],
+        categories: ["park", "natural_feature", "tourist_attraction"],
         rating: 4.6,
         description: "Lush rainforest of waterfalls, ferns, and mountain views. Short dips and longer hikes deliver classic tropical scenery.",
         tips: [
@@ -168,7 +168,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "148 Calle San Sebastián, San Juan, PR 00901",
         latitude: 18.4672,
         longitude: -66.1171,
-        place_types: ["bar", "night_club"],
+        categories: ["bar", "night_club"],
         rating: 4.4,
         description: "Speakeasy-style cocktail labyrinth. Multiple rooms, solid classics, and late-night salsa without the pretension.",
         tips: [
@@ -188,7 +188,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Old San Juan, PR",
         latitude: 18.4658,
         longitude: -66.1057,
-        place_types: ["neighborhood", "tourist_attraction", "historical_landmark"],
+        categories: ["neighborhood", "tourist_attraction", "historical_landmark"],
         rating: 4.7,
         description: "Compact colonial capital with pastel streets, plazas, and sea walls. Best explored on foot between cafes and ramparts.",
         tips: [
@@ -208,7 +208,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Vieques, PR",
         latitude: 18.1367,
         longitude: -65.4419,
-        place_types: ["administrative_area_level_2", "tourist_attraction"],
+        categories: ["administrative_area_level_2", "tourist_attraction"],
         rating: 4.6,
         description: "Laid-back sister island with wild beaches, roaming horses, and the planet's brightest bio bay. Slow days, starry nights.",
         tips: [
@@ -228,7 +228,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Cabo Rojo, PR",
         latitude: 17.9449,
         longitude: -67.2073,
-        place_types: ["natural_feature", "beach"],
+        categories: ["natural_feature", "beach"],
         rating: 4.7,
         description: "Dramatic crescent beach beneath limestone cliffs near the lighthouse. Views and water color steal the show.",
         tips: [
@@ -248,7 +248,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Cayey, PR",
         latitude: 18.1136,
         longitude: -66.1641,
-        place_types: ["restaurant", "tourist_attraction"],
+        categories: ["restaurant", "tourist_attraction"],
         rating: 4.5,
         description: "Mountainside strip of roast-pork joints and weekend music. Order crispy skin, classic sides, and eat family-style.",
         tips: [
@@ -268,7 +268,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Old San Juan, PR",
         latitude: 18.4707,
         longitude: -66.1275,
-        place_types: ["tourist_attraction", "park"],
+        categories: ["tourist_attraction", "park"],
         rating: 4.6,
         description: "Flat waterfront path hugging Old San Juan's walls. Breezy views, cats on the rocks, easy sunset stroll.",
         tips: [
@@ -288,7 +288,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "100 Calle Cristo, San Juan, PR 00901",
         latitude: 18.4647,
         longitude: -66.1056,
-        place_types: ["lodging", "tourist_attraction"],
+        categories: ["lodging", "tourist_attraction"],
         rating: 4.3,
         description: "Elegant 17th-century convent turned boutique hotel. Cool courtyard, tile floors, and quiet respite off the plaza.",
         tips: [
@@ -308,7 +308,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Near Fajardo, PR",
         latitude: 18.3833,
         longitude: -65.6000,
-        place_types: ["natural_feature", "tourist_attraction"],
+        categories: ["natural_feature", "tourist_attraction"],
         rating: 4.7,
         description: "Uninhabited cay of white sand and clear shallows. Boat-in picnics and easy snorkeling off the beach.",
         tips: [
@@ -328,7 +328,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "Aguadilla, PR",
         latitude: 18.4924,
         longitude: -67.1558,
-        place_types: ["tourist_attraction", "historical_landmark"],
+        categories: ["tourist_attraction", "historical_landmark"],
         rating: 4.3,
         description: "Photogenic lighthouse ruins on windswept cliffs. Rugged edges, surf below, and big-sky sunsets.",
         tips: [
@@ -348,7 +348,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
         formatted_address: "251 Calle Fortaleza, San Juan, PR 00901",
         latitude: 18.4644,
         longitude: -66.1083,
-        place_types: ["restaurant", "establishment"],
+        categories: ["restaurant", "establishment"],
         rating: 4.2,
         description: "Old-school lunch counter in Old San Juan. Hearty Puerto Rican staples, quick service, fair prices.",
         tips: [
@@ -401,7 +401,7 @@ defmodule Mix.Tasks.PopulatePuertoRicoPois do
           formatted_address: poi_data.formatted_address,
           latitude: Decimal.new(to_string(poi_data.latitude)),
           longitude: Decimal.new(to_string(poi_data.longitude)),
-          place_types: poi_data.place_types,
+          categories: poi_data.categories,
           rating: poi_data.rating && Decimal.new(to_string(poi_data.rating)),
           description: poi_data.description,
           tips: poi_data.tips,

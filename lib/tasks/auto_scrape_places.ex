@@ -284,7 +284,7 @@ defmodule Mix.Tasks.AutoScrapePlaces do
           formatted_address: address,
           phone_number: nil,
           website: full_tripadvisor_url,
-          place_types: [default_type],
+          categories: [default_type],
           rating: Decimal.new("4.0"),
           reviews_count: 100,
           price_level: nil,

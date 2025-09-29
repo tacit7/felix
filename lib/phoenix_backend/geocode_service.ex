@@ -232,7 +232,7 @@ defmodule RouteWiseApi.GeocodeService do
         
         # Return in expected format
         city_data = %{
-          name: extract_city_name(location_data),
+          name: extract_city_name(location_data, location),
           display_name: location_data["display_name"] || location,
           lat: lat,
           lon: lon,
@@ -277,7 +277,7 @@ defmodule RouteWiseApi.GeocodeService do
       
       city_attrs = %{
         location_iq_place_id: location_data["place_id"] || "locationiq_#{System.unique_integer()}",
-        name: extract_city_name(location_data),
+        name: extract_city_name(location_data, location),
         display_name: display_name,
         latitude: Decimal.new(to_string(lat)),
         longitude: Decimal.new(to_string(lng)),
@@ -302,18 +302,25 @@ defmodule RouteWiseApi.GeocodeService do
     end
   end
   
-  defp extract_city_name(location_data) do
+  defp extract_city_name(location_data, fallback_name) do
     display_name = location_data["display_name"] || ""
-    city_name = String.trim(String.split(display_name, ",") |> List.first() || "Unknown")
-    
-    pre!(String.length(city_name) > 0, "City name cannot be empty")
-    city_name
+    city_name = String.trim(String.split(display_name, ",") |> List.first() || "")
+
+    # If we can't extract a valid city name from display_name, use the original query as fallback
+    if String.length(city_name) > 0 do
+      city_name
+    else
+      # Use the original location query as the name if LocationIQ doesn't provide a good display name
+      String.trim(fallback_name)
+    end
   end
   
   defp convert_to_float(value) when is_float(value), do: value
   defp convert_to_float(value) when is_binary(value), do: String.to_float(value)
   defp convert_to_float(%Decimal{} = decimal), do: Decimal.to_float(decimal)
   defp convert_to_float(value) when is_integer(value), do: value * 1.0
+  defp convert_to_float(nil), do: raise(ArgumentError, "Cannot convert nil to float")
+  defp convert_to_float(value), do: raise(ArgumentError, "Cannot convert #{inspect(value)} to float")
   
   defp get_cache_backend do
     try do

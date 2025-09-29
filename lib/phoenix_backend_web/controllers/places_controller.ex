@@ -892,11 +892,11 @@ defmodule RouteWiseApiWeb.PlacesController do
     PlacesService.autocomplete_places(input, google_opts)
   end
   
-  defp build_google_places_opts(opts, place_types) do
+  defp build_google_places_opts(opts, categories) do
     google_opts = []
     
     # Add types
-    google_opts = Keyword.put(google_opts, :types, place_types)
+    google_opts = Keyword.put(google_opts, :types, categories)
     
     # Add location bias if available
     case Keyword.get(opts, :location) do

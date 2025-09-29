@@ -49,7 +49,7 @@ defmodule RouteWiseApiWeb.ImageController do
     ".gif" => "image/gif"
   }
 
-  @cache_max_age 86_400  # 24 hours
+  @cache_max_age 2_592_000  # 30 days (1 month)
   @size_variants ["thumb", "medium", "large", "xlarge"]
 
   @doc """
@@ -70,11 +70,16 @@ defmodule RouteWiseApiWeb.ImageController do
   GET /api/images/pois/456/thumb?format=jpg
   """
   def poi_image(conn, %{"poi_id" => poi_id, "size" => size} = params) do
-    unless size in @size_variants do
+    # Handle size with file extension (e.g., "thumb.webp")
+    {clean_size, format} = case String.split(size, ".", parts: 2) do
+      [size_part, ext] -> {size_part, ext}
+      [size_part] -> {size_part, Map.get(params, "format", "webp")}
+    end
+
+    unless clean_size in @size_variants do
       return_error(conn, :bad_request, "Invalid size. Must be one of: #{Enum.join(@size_variants, ", ")}")
     else
-      format = Map.get(params, "format", "webp")
-      serve_image(conn, "pois/#{poi_id}/#{size}.#{format}", fallback: "fallbacks/poi-placeholder.#{format}")
+      serve_image(conn, "pois/#{poi_id}/#{clean_size}.#{format}", fallback: "fallbacks/poi-placeholder.#{format}")
     end
   end
 
@@ -96,15 +101,43 @@ defmodule RouteWiseApiWeb.ImageController do
   """
   def category_icon(conn, %{"category" => category} = params) do
     style = Map.get(params, "style", "filled")
-    
-    icon_filename = case style do
-      "filled" -> "#{category}.svg"
-      "outline" -> "#{category}-outline.svg" 
-      "color" -> "#{category}-color.svg"
-      _ -> "#{category}.svg"
+
+    # Handle case where category already includes file extension
+    {category_name, requested_ext} = case Path.extname(category) do
+      "" -> {category, nil}
+      ext -> {Path.rootname(category), String.downcase(ext)}
     end
 
-    serve_image(conn, "categories/#{icon_filename}", fallback: "fallbacks/default-icon.svg")
+    # Try multiple file formats (JPG first, then SVG fallback)
+    possible_files = case style do
+      "filled" ->
+        if requested_ext do
+          ["#{category_name}#{requested_ext}"]  # Use requested extension only
+        else
+          ["#{category_name}.jpg", "#{category_name}.svg"]
+        end
+      "outline" -> ["#{category_name}-outline.svg"]
+      "color" -> ["#{category_name}-color.svg"]
+      _ ->
+        if requested_ext do
+          ["#{category_name}#{requested_ext}"]  # Use requested extension only
+        else
+          ["#{category_name}.jpg", "#{category_name}.svg"]
+        end
+    end
+
+    # Find the first existing file
+    base_path = Path.join([Application.app_dir(:phoenix_backend, "priv"), "static", "images", "categories"])
+    existing_file = Enum.find(possible_files, fn filename ->
+      File.exists?(Path.join(base_path, filename))
+    end)
+
+    case existing_file do
+      nil ->
+        serve_image(conn, "categories/#{category_name}.svg", fallback: "fallbacks/default-icon.svg")
+      filename ->
+        serve_image(conn, "categories/#{filename}", fallback: "fallbacks/default-icon.svg")
+    end
   end
 
   @doc """
@@ -205,8 +238,16 @@ defmodule RouteWiseApiWeb.ImageController do
   defp serve_image_data(conn, image_data, file_path, file_stat) do
     content_type = get_content_type(file_path)
     etag = generate_etag(file_stat)
-    last_modified = format_http_date(file_stat.mtime)
-    
+
+    # Handle last_modified with error protection
+    last_modified = try do
+      format_http_date(file_stat.mtime)
+    rescue
+      _ ->
+        Logger.debug("Failed to format HTTP date for file #{file_path}, using current time")
+        DateTime.utc_now() |> Calendar.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    end
+
     conn
     |> put_resp_content_type(content_type)
     |> put_resp_header("cache-control", "public, max-age=#{@cache_max_age}, immutable")
@@ -224,7 +265,30 @@ defmodule RouteWiseApiWeb.ImageController do
 
   defp serve_fallback_or_error(conn, fallback_path) do
     Logger.debug("Serving fallback image: #{fallback_path}")
-    serve_image(conn, fallback_path, fallback: nil)  # No nested fallbacks
+
+    # Check if the fallback exists, if not try alternative formats
+    full_fallback_path = build_image_path(fallback_path)
+
+    if File.exists?(full_fallback_path) do
+      serve_image(conn, fallback_path, fallback: nil)  # No nested fallbacks
+    else
+      # If WebP/JPG/PNG fallback doesn't exist, try SVG version
+      alternative_path = case Path.extname(fallback_path) do
+        ".webp" -> String.replace(fallback_path, ".webp", ".svg")
+        ".jpg" -> String.replace(fallback_path, ".jpg", ".svg")
+        ".png" -> String.replace(fallback_path, ".png", ".svg")
+        _ -> "fallbacks/default-placeholder.svg"
+      end
+
+      alternative_full_path = build_image_path(alternative_path)
+      if File.exists?(alternative_full_path) do
+        Logger.debug("Using alternative fallback: #{alternative_path}")
+        serve_image(conn, alternative_path, fallback: nil)
+      else
+        Logger.debug("Using default fallback: fallbacks/default-placeholder.svg")
+        serve_image(conn, "fallbacks/default-placeholder.svg", fallback: nil)
+      end
+    end
   end
 
   defp build_image_path(relative_path) do
@@ -249,13 +313,16 @@ defmodule RouteWiseApiWeb.ImageController do
   end
 
   defp generate_etag(%File.Stat{mtime: mtime, size: size}) do
-    # Convert mtime to unix timestamp
-    unix_time = mtime |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()
+    # Convert Erlang timestamp to unix timestamp
+    unix_time = :calendar.datetime_to_gregorian_seconds(mtime) - 62_167_219_200
     hash = :crypto.hash(:md5, "#{unix_time}-#{size}") |> Base.encode16(case: :lower)
     "\"#{String.slice(hash, 0, 16)}\""
   end
 
-  defp format_http_date(naive_datetime) do
+  defp format_http_date(erlang_timestamp) do
+    # Convert Erlang timestamp to NaiveDateTime first
+    naive_datetime = NaiveDateTime.from_erl!(erlang_timestamp)
+
     naive_datetime
     |> DateTime.from_naive!("Etc/UTC")
     |> Calendar.strftime("%a, %d %b %Y %H:%M:%S GMT")

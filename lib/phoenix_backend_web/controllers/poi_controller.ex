@@ -180,9 +180,60 @@ defmodule RouteWiseApiWeb.POIController do
   end
 
   @doc """
+  GET /api/pois/bounds
+  Get POIs within map bounds (without clustering).
+
+  ## Parameters
+  - north, south, east, west: Map bounds (required)
+  - categories: Comma-separated list of categories (optional)
+  - min_rating: Minimum rating filter (optional)
+  - limit: Maximum number of POIs to return (optional, default: 100)
+
+  ## Examples
+  GET /api/pois/bounds?north=30.33&south=30.27&east=-97.74&west=-97.77
+  GET /api/pois/bounds?north=30.33&south=30.27&east=-97.74&west=-97.77&categories=restaurant,food&min_rating=4.0&limit=50
+  """
+  def bounds(conn, params) do
+    with {:ok, viewport_bounds} <- extract_viewport_bounds(params),
+         {:ok, filters} <- extract_bounds_filters(params),
+         {:ok, pois} <- get_pois_in_bounds(viewport_bounds, filters) do
+
+      cache_info = determine_bounds_cache_status(pois, :viewport)
+
+      # Format POIs for response using POIFormatterService
+      formatted_pois = Enum.map(pois, &RouteWiseApi.POIFormatterService.format_poi_for_response/1)
+
+      json(conn, %{
+        data: %{
+          pois: formatted_pois,
+          bounds: viewport_bounds,
+          filters: filters,
+          count: length(pois)
+        },
+        cache: cache_info
+      })
+    else
+      {:error, :invalid_bounds} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Invalid viewport bounds. All bounds parameters (north, south, east, west) are required."})
+
+      {:error, :invalid_filters} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Invalid filter parameters."})
+
+      {:error, reason} ->
+        conn
+        |> put_status(:internal_server_error)
+        |> json(%{error: "Failed to fetch POIs: #{reason}"})
+    end
+  end
+
+  @doc """
   GET /api/pois/categories
   Get available POI categories.
-  
+
   ## Examples
   GET /api/pois/categories
   """
@@ -377,6 +428,122 @@ defmodule RouteWiseApiWeb.POIController do
       RouteWiseApi.Caching.backend()
     rescue
       _ -> :database
+    end
+  end
+
+  # Helper functions for bounds endpoint
+
+  defp extract_bounds_filters(params) do
+    try do
+      filters = %{}
+
+      # Extract categories
+      filters = case params["categories"] do
+        nil -> filters
+        "" -> filters
+        categories_str when is_binary(categories_str) ->
+          categories = String.split(categories_str, ",") |> Enum.map(&String.trim/1)
+          Map.put(filters, :categories, categories)
+        _ -> filters
+      end
+
+      # Extract minimum rating
+      filters = case params["min_rating"] do
+        nil -> filters
+        "" -> filters
+        rating_str when is_binary(rating_str) ->
+          case Float.parse(rating_str) do
+            {rating, ""} when rating >= 0.0 and rating <= 5.0 ->
+              Map.put(filters, :min_rating, rating)
+            _ -> filters
+          end
+        _ -> filters
+      end
+
+      # Extract limit
+      filters = case params["limit"] do
+        nil -> Map.put(filters, :limit, 100)  # Default limit
+        "" -> Map.put(filters, :limit, 100)
+        limit_str when is_binary(limit_str) ->
+          case Integer.parse(limit_str) do
+            {limit, ""} when limit > 0 and limit <= 500 ->
+              Map.put(filters, :limit, limit)
+            _ -> Map.put(filters, :limit, 100)
+          end
+        _ -> Map.put(filters, :limit, 100)
+      end
+
+      {:ok, filters}
+    rescue
+      _ -> {:error, :invalid_filters}
+    end
+  end
+
+  defp get_pois_in_bounds(viewport_bounds, filters) do
+    try do
+      %{north: north, south: south, east: east, west: west} = viewport_bounds
+      limit = Map.get(filters, :limit, 100)
+
+      # Use the existing Places module query function - it returns {:ok, pois}
+      case RouteWiseApi.Places.query_pois_in_bounds(south, north, west, east, filters) do
+        {:ok, pois} ->
+          # Apply limit
+          limited_pois = Enum.take(pois, limit)
+          {:ok, limited_pois}
+        {:error, reason} ->
+          {:error, reason}
+      end
+    rescue
+      error ->
+        require Logger
+        Logger.error("Failed to get POIs in bounds: #{inspect(error)}")
+        {:error, "Database query failed"}
+    end
+  end
+
+  defp determine_bounds_cache_status(pois, _operation_type) do
+    backend = get_current_backend()
+
+    cond do
+      # Empty results
+      Enum.empty?(pois) ->
+        %{
+          status: "no_data",
+          timestamp: DateTime.utc_now() |> DateTime.to_iso8601(),
+          backend: backend,
+          environment: Application.get_env(:phoenix_backend, :env, :dev)
+        }
+
+      # POI data from database - check if it's recent
+      is_list(pois) and length(pois) > 0 ->
+        # Check if this looks like fresh database data
+        status = case hd(pois) do
+          %{updated_at: nil} -> "miss"
+          %{updated_at: timestamp} ->
+            age_minutes = DateTime.diff(DateTime.utc_now(), timestamp, :minute)
+            if age_minutes <= 1440 do  # Less than 24 hours
+              "hit"
+            else
+              "miss"
+            end
+          _ -> "hit"
+        end
+
+        %{
+          status: status,
+          timestamp: DateTime.utc_now() |> DateTime.to_iso8601(),
+          backend: backend,
+          environment: Application.get_env(:phoenix_backend, :env, :dev)
+        }
+
+      # Default case
+      true ->
+        %{
+          status: "hit",
+          timestamp: DateTime.utc_now() |> DateTime.to_iso8601(),
+          backend: backend,
+          environment: Application.get_env(:phoenix_backend, :env, :dev)
+        }
     end
   end
 end

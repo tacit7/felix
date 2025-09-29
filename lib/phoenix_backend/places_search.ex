@@ -83,7 +83,7 @@ defmodule RouteWiseApi.PlacesSearch do
         id: p.id,
         name: p.name,
         formatted_address: p.formatted_address,
-        place_types: p.place_types,
+        categories: p.categories,
         rating: p.rating,
         latitude: p.latitude,
         longitude: p.longitude
@@ -115,7 +115,7 @@ defmodule RouteWiseApi.PlacesSearch do
     min_rating = opts[:min_rating] || 3.0
 
     from(p in Place,
-      where: ^category in p.place_types,
+      where: ^category in p.categories,
       where: p.rating >= ^min_rating
     )
     |> apply_location_filter(location, radius)
@@ -156,7 +156,7 @@ defmodule RouteWiseApi.PlacesSearch do
       place ->
         from(p in Place,
           where: p.id != ^place_id,
-          where: fragment("? && ?", p.place_types, ^place.place_types),
+          where: fragment("? && ?", p.categories, ^place.categories),
           where: fragment("abs(? - ?) <= 1.0", p.rating, ^place.rating)
         )
         |> order_by([p], [desc: p.popularity_score])
@@ -191,7 +191,7 @@ defmodule RouteWiseApi.PlacesSearch do
   defp apply_category_filter(query, []), do: query
   defp apply_category_filter(query, categories) do
     from q in query,
-      where: fragment("? && ?", q.place_types, ^categories)
+      where: fragment("? && ?", q.categories, ^categories)
   end
 
   defp apply_rating_filter(query, nil), do: query
@@ -249,7 +249,7 @@ defmodule RouteWiseApi.PlacesSearch do
         formatted_address: q.formatted_address,
         latitude: q.latitude,
         longitude: q.longitude,
-        place_types: q.place_types,
+        categories: q.categories,
         rating: q.rating,
         price_level: q.price_level,
         reviews_count: q.reviews_count,

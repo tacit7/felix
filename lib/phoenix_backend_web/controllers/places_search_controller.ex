@@ -260,7 +260,7 @@ defmodule RouteWiseApiWeb.PlacesSearchController do
         lat: format_coordinate(place.latitude),
         lng: format_coordinate(place.longitude)
       },
-      categories: place.place_types || [],
+      categories: place.categories || [],
       rating: format_rating(place.rating),
       price_level: place.price_level,
       review_count: place.reviews_count || 0,
@@ -292,7 +292,7 @@ defmodule RouteWiseApiWeb.PlacesSearchController do
         id: suggestion.id,
         name: suggestion.name,
         address: suggestion.formatted_address,
-        categories: suggestion.place_types || [],
+        categories: suggestion.categories || [],
         rating: format_rating(suggestion.rating),
         coordinates: %{
           lat: format_coordinate(suggestion.latitude),

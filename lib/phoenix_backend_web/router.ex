@@ -95,6 +95,10 @@ defmodule RouteWiseApiWeb.Router do
     get "/places/nearby", PlacesController, :nearby
     get "/places/photo", PlacesController, :photo
 
+    # Enhanced places search with aliases (POA implementation)
+    get "/places/search-enhanced", PlaceSearchController, :search
+    get "/places/search-stats", PlaceSearchController, :stats
+
     # Real-time places search with background scraping
     get "/places/live-search", PlacesLiveController, :search
     get "/places/scrape-status/:location", PlacesLiveController, :scrape_status
@@ -116,6 +120,8 @@ defmodule RouteWiseApiWeb.Router do
     get "/pois/nearby", POIController, :nearby
     # New clustering endpoint for anonymous users
     get "/pois/clusters", POIController, :clusters
+    # Map bounds search endpoint (no clustering)
+    get "/pois/bounds", POIController, :bounds
     get "/pois/:id", POIController, :show
 
     # Consolidated route results endpoint (includes POIs, route data, maps key)
@@ -131,6 +137,14 @@ defmodule RouteWiseApiWeb.Router do
     get "/search/category/:category", PlacesSearchController, :search_category
     get "/search/popular", PlacesSearchController, :popular_places
     get "/search/similar/:place_id", PlacesSearchController, :similar_places
+
+    # Places nearby endpoints (public reading)
+    get "/places/:place_id/nearby", PlacesNearbyController, :index
+    get "/places/nearby/:id", PlacesNearbyController, :show
+    get "/places/nearby/search", PlacesNearbyController, :search
+    get "/places/:place_id/nearby/category/:category", PlacesNearbyController, :by_category
+    get "/places/:place_id/nearby/distance", PlacesNearbyController, :by_distance
+    get "/places/nearby/stats", PlacesNearbyController, :stats
 
     # Route calculation endpoints (no auth required for basic calculations)
     post "/routes/calculate", RoutesController, :calculate
@@ -148,6 +162,13 @@ defmodule RouteWiseApiWeb.Router do
     # Blog endpoints (public reading)
     get "/blog", BlogController, :index
     get "/blog/:slug", BlogController, :show
+
+    # Travel news endpoints (public reading)
+    get "/travel-news", TravelNewsController, :index
+    get "/travel-news/recent", TravelNewsController, :recent
+    get "/travel-news/subjects", TravelNewsController, :subjects
+    get "/travel-news/subject/:subject", TravelNewsController, :by_subject
+    get "/travel-news/:id", TravelNewsController, :show
   end
 
   # Tile proxy endpoints (binary data, no auth required) - TEMPORARILY DISABLED
@@ -219,6 +240,13 @@ defmodule RouteWiseApiWeb.Router do
     # Blog management endpoints (admin only for now)
     resources("/blog", BlogController, except: [:new, :edit, :show, :index])
     post "/blog/:id/publish", BlogController, :publish
+
+    # Places nearby management endpoints (authentication required)
+    post "/places/nearby", PlacesNearbyController, :create
+    post "/places/nearby/admin", PlacesNearbyController, :create_admin
+    put "/places/nearby/:id", PlacesNearbyController, :update
+    delete "/places/nearby/:id", PlacesNearbyController, :delete
+    patch "/places/nearby/:id/toggle", PlacesNearbyController, :toggle_active
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -92,7 +92,7 @@ defmodule Mix.Tasks.UpdatePlaceCategories do
     # Research new categories online
     case research_place_categories(place) do
       {:ok, new_categories} when is_list(new_categories) and length(new_categories) > 0 ->
-        current_categories = place.place_types || []
+        current_categories = place.categories || []
         
         if new_categories == current_categories do
           {:skip, "categories unchanged"}
@@ -256,7 +256,7 @@ defmodule Mix.Tasks.UpdatePlaceCategories do
   end
   
   defp save_updated_categories(place, new_categories) do
-    changeset = Place.changeset(place, %{place_types: new_categories})
+    changeset = Place.changeset(place, %{categories: new_categories})
     
     case Repo.update(changeset) do
       {:ok, updated_place} ->

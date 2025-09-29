@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mix run:*)",
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(say:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

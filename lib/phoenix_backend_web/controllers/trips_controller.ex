@@ -129,7 +129,25 @@ defmodule RouteWiseApiWeb.TripsController do
   """
   def update(conn, %{"id" => id, "trip" => trip_params}) do
     current_user = conn.assigns.current_user
-    
+
+    case Trips.get_user_trip(id, current_user.id) do
+      nil -> {:error, :not_found}
+      trip ->
+        with {:ok, %Trip{} = trip} <- Trips.update_trip(trip, trip_params) do
+          render(conn, :show, trip: trip)
+        end
+    end
+  end
+
+  def update(conn, params) do
+    current_user = conn.assigns.current_user
+    id = params["id"]
+
+    # Handle unwrapped parameters (frontend sends data directly)
+    trip_params = params
+    |> Map.drop(["id", "_csrf_token", "_format"])
+    |> map_frontend_field_names()
+
     case Trips.get_user_trip(id, current_user.id) do
       nil -> {:error, :not_found}
       trip ->

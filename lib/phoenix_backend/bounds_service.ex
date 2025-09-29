@@ -16,6 +16,36 @@ defmodule RouteWiseApi.BoundsService do
   import RouteWiseApi.Assert
   
   @doc """
+  Calculate bounds around specific coordinates with a given radius.
+  """
+  def calculate_coordinate_bounds(lat, lon, radius_meters \\ 5000) do
+    pre!(is_float(lat) and lat >= -90.0 and lat <= 90.0, "lat must be valid coordinate")
+    pre!(is_float(lon) and lon >= -180.0 and lon <= 180.0, "lon must be valid coordinate")
+    pre!(is_integer(radius_meters) and radius_meters > 0, "radius_meters must be positive integer")
+
+    # Convert radius to degrees (approximate)
+    # 1 degree of latitude ≈ 111,320 meters
+    # 1 degree of longitude varies by latitude, but we'll use a simplified calculation
+    lat_offset = radius_meters / 111_320.0
+    lon_offset = radius_meters / (111_320.0 * :math.cos(lat * :math.pi() / 180.0))
+
+    bounds = %{
+      north: min(lat + lat_offset, 90.0),
+      south: max(lat - lat_offset, -90.0),
+      east: min(lon + lon_offset, 180.0),
+      west: max(lon - lon_offset, -180.0)
+    }
+
+    post!(bounds.north > bounds.south, "Calculated bounds invalid: north <= south")
+    post!(TypeUtils.valid_coordinate?(bounds.north, :lat), "Calculated invalid north coordinate")
+    post!(TypeUtils.valid_coordinate?(bounds.south, :lat), "Calculated invalid south coordinate")
+    post!(TypeUtils.valid_coordinate?(bounds.east, :lng), "Calculated invalid east coordinate")
+    post!(TypeUtils.valid_coordinate?(bounds.west, :lng), "Calculated invalid west coordinate")
+
+    bounds
+  end
+
+  @doc """
   Calculate appropriate bounds for a city using Geographic Bounds System.
   """
   def calculate_city_bounds(city) do

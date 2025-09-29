@@ -404,7 +404,7 @@ defmodule RouteWiseApiWeb.AuthController do
       # Create or find mock user
       mock_user_params = %{
         username: "testuser",
-        password: "password123",
+        password: "Password123!",
         email: "test@example.com",
         full_name: "Test User"
       }
@@ -413,7 +413,9 @@ defmodule RouteWiseApiWeb.AuthController do
         nil ->
           case Accounts.register_user(mock_user_params) do
             {:ok, user} -> user
-            {:error, _} -> 
+            {:error, changeset} ->
+              require Logger
+              Logger.error("Mock user creation failed: #{inspect(changeset.errors)}")
               # User might exist with different constraints, try to get by email
               Accounts.get_user_by_email("test@example.com")
           end

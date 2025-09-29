@@ -197,8 +197,15 @@ defmodule RouteWiseApi.AutocompleteService do
   end
 
   defp search_google_only(query, opts) do
+    # Convert map opts to keyword list for GooglePlaces
+    google_opts = if is_map(opts) do
+      Enum.to_list(opts)
+    else
+      opts
+    end
+
     # Use existing Google Places autocomplete
-    case GooglePlaces.autocomplete(query, opts) do
+    case GooglePlaces.autocomplete(query, google_opts) do
       {:ok, %{"predictions" => predictions}} when is_list(predictions) ->
         formatted_results = Enum.map(predictions, &format_google_result/1)
         {:ok, formatted_results}
@@ -245,12 +252,21 @@ defmodule RouteWiseApi.AutocompleteService do
 
   defp deduplicate_results(results) do
     results
-    |> Enum.uniq_by(fn result -> 
-      # Dedupe by name + approximate location (handle nil coordinates)
+    |> Enum.uniq_by(fn result ->
+      # Improved deduplication:
+      # 1. For LocationIQ results with same ID and name, keep only the first one
+      # 2. For other sources, dedupe by name + approximate location
       name_key = String.downcase(result.name)
-      lat_key = if result.lat, do: Float.round(result.lat, 2), else: nil
-      lon_key = if result.lon, do: Float.round(result.lon, 2), else: nil
-      {name_key, lat_key, lon_key}
+
+      if result.source == "locationiq" do
+        # For LocationIQ, use ID + name to dedupe exact duplicates
+        {result.id, name_key}
+      else
+        # For other sources, use name + location
+        lat_key = if result.lat, do: Float.round(result.lat, 2), else: nil
+        lon_key = if result.lon, do: Float.round(result.lon, 2), else: nil
+        {name_key, lat_key, lon_key}
+      end
     end)
     |> Enum.sort_by(&result_sort_priority/1)
   end

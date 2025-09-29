@@ -112,7 +112,7 @@ defmodule RouteWiseApiWeb.PlacesLiveController do
         longitude: place.longitude,
         address: place.address,
         rating: place.rating,
-        place_types: place.place_types,
+        categories: place.categories,
         website: place.website,
         data_source: place.data_source
       }

@@ -304,7 +304,7 @@ defmodule RouteWiseApi.BackgroundScraper do
           longitude: lng,
           address: Map.get(place_data, "address", ""),
           website: Map.get(place_data, "tripadvisor_url"),
-          place_types: [default_type],
+          categories: [default_type],
           rating: 4.0,
           user_ratings_total: 100,
           business_status: "OPERATIONAL",

@@ -14,17 +14,20 @@ defmodule RouteWiseApiWeb.ExploreResultsController do
   - Geocoded coordinates for location
   - Google Maps API key
   - Metadata
-  
+
   ## Parameters
-  - location: Location to search (required if place_id not provided)
-  - place_id: UUID from cached_places table (required if location not provided)
+  - location: Location to search (required if place_id and lat/lon not provided)
+  - place_id: UUID from cached_places table (required if location and lat/lon not provided)
+  - lat: Latitude coordinate (required if lon provided and location/place_id not provided)
+  - lon: Longitude coordinate (required if lat provided and location/place_id not provided)
   - source: Data source - "auto" (default), "google", "osm"
   - radius: Search radius in meters (optional, default: 5000)
   - categories: Comma-separated categories for OSM search (optional)
-  
+
   ## Examples
   GET /api/explore-results?location=Austin&source=auto
   GET /api/explore-results?place_id=550e8400-e29b-41d4-a716-446655440000&source=auto
+  GET /api/explore-results?lat=18.4655&lon=-66.1057&source=auto&radius=10000
   GET /api/explore-results?location=Puerto%20Rico&source=osm&radius=10000&categories=restaurant,attraction
   """
   def index(conn, %{"place_id" => place_id} = params) do
@@ -64,22 +67,65 @@ defmodule RouteWiseApiWeb.ExploreResultsController do
     end
   end
 
+  def index(conn, %{"lat" => lat_str, "lon" => lon_str} = params) do
+    pre!(is_binary(lat_str), "lat must be a string")
+    pre!(is_binary(lon_str), "lon must be a string")
+    pre!(is_map(params), "params must be a map")
+
+    try do
+      # Parse and validate coordinates
+      case {Float.parse(lat_str), Float.parse(lon_str)} do
+        {{lat, ""}, {lon, ""}} ->
+          pre!(lat >= -90.0 and lat <= 90.0, "lat must be between -90 and 90")
+          pre!(lon >= -180.0 and lon <= 180.0, "lon must be between -180 and 180")
+
+          Logger.info("🎯 Using direct coordinates: (#{lat}, #{lon})")
+
+          # Build location data from coordinates
+          location_name = "Location (#{lat}, #{lon})"
+          location_data = LocationDataService.build_coordinate_location_data(lat, lon, location_name)
+
+          # Fetch and format POIs using coordinates
+          pois = POIProcessingService.process_pois_for_coordinates(lat, lon, params)
+          formatted_pois = POIProcessingService.format_and_log_pois(pois, location_name)
+
+          # Build response (no additional metadata for coordinate searches)
+          response = ResponseBuilder.build_explore_response(pois, formatted_pois, location_name, location_data, %{})
+          json(conn, response)
+
+        _ ->
+          conn
+          |> put_status(:bad_request)
+          |> json(ResponseBuilder.build_missing_parameter_error(%{
+            name: "lat/lon",
+            message: "lat and lon must be valid decimal numbers"
+          }))
+      end
+
+    rescue
+      error ->
+        conn
+        |> put_status(:internal_server_error)
+        |> json(ResponseBuilder.build_internal_server_error("fetch explore results", error))
+    end
+  end
+
   def index(conn, %{"location" => location} = params) do
     pre!(is_binary(location) and byte_size(location) > 0, "location must be non-empty string")
     pre!(is_map(params), "params must be a map")
-    
+
     try do
       # Geocode location with bounds (with caching)
       location_data = LocationDataService.fetch_location_with_bounds_cached(location)
-      
+
       # Fetch and format POIs
       pois = POIProcessingService.process_pois_for_location(location, params)
       formatted_pois = POIProcessingService.format_and_log_pois(pois, location)
-      
+
       # Build response (no additional metadata for location searches)
       response = ResponseBuilder.build_explore_response(pois, formatted_pois, location, location_data, %{})
       json(conn, response)
-      
+
     rescue
       error ->
         conn
@@ -93,8 +139,8 @@ defmodule RouteWiseApiWeb.ExploreResultsController do
     conn
     |> put_status(:bad_request)
     |> json(ResponseBuilder.build_missing_parameter_error(%{
-      name: "location or place_id", 
-      message: "Either 'location' or 'place_id' query parameter is required"
+      name: "location, place_id, or lat/lon",
+      message: "Either 'location', 'place_id', or both 'lat' and 'lon' query parameters are required"
     }))
   end
 

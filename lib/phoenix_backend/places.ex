@@ -7,6 +7,7 @@ defmodule RouteWiseApi.Places do
   require Logger
   alias RouteWiseApi.Repo
   alias RouteWiseApi.Places.Place
+  alias RouteWiseApi.Places.PlaceNearby
   alias RouteWiseApi.Places.Location
   alias RouteWiseApi.Places.CachedPlace
 
@@ -318,6 +319,7 @@ defmodule RouteWiseApi.Places do
     |> where([p], p.longitude >= ^(location.lng - lng_delta))
     |> where([p], p.longitude <= ^(location.lng + lng_delta))
     |> order_by([p], desc: p.curated, desc: p.rating, desc: p.reviews_count)  # Prioritize curated places first
+    |> preload(:default_image)
     |> Repo.all()
   end
 
@@ -849,6 +851,7 @@ defmodule RouteWiseApi.Places do
     query
     |> order_by([p], [desc: p.rating, desc: p.user_ratings_total])
     |> limit(50)
+    |> preload(:default_image)
     |> Repo.all()
   end
 
@@ -965,5 +968,318 @@ defmodule RouteWiseApi.Places do
       limit: ^limit
     )
     |> Repo.all()
+  end
+
+  # Places Nearby functions
+
+  @doc """
+  Returns the list of nearby places for a specific place.
+
+  ## Examples
+
+      iex> list_nearby_places(place_id)
+      [%PlaceNearby{}, ...]
+
+  """
+  def list_nearby_places(place_id, opts \\ []) do
+    base_query = from pn in PlaceNearby,
+      where: pn.place_id == ^place_id,
+      preload: [:place]
+
+    base_query
+    |> PlaceNearby.filter_by_criteria(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a single nearby place by ID.
+
+  Raises `Ecto.NoResultsError` if the PlaceNearby does not exist.
+
+  ## Examples
+
+      iex> get_nearby_place!(123)
+      %PlaceNearby{}
+
+      iex> get_nearby_place!("invalid")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_nearby_place!(id), do: Repo.get!(PlaceNearby, id)
+
+  @doc """
+  Gets a single nearby place by ID.
+
+  Returns nil if the PlaceNearby does not exist.
+
+  ## Examples
+
+      iex> get_nearby_place(123)
+      %PlaceNearby{}
+
+      iex> get_nearby_place("invalid")
+      nil
+
+  """
+  def get_nearby_place(id), do: Repo.get(PlaceNearby, id)
+
+  @doc """
+  Creates a nearby place recommendation.
+
+  ## Examples
+
+      iex> create_nearby_place(%{place_id: 1, nearby_place_name: "Austin", recommendation_reason: "Great music scene"})
+      {:ok, %PlaceNearby{}}
+
+      iex> create_nearby_place(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_nearby_place(attrs \\ %{}) do
+    %PlaceNearby{}
+    |> PlaceNearby.changeset(attrs)
+    |> maybe_calculate_distance()
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a nearby place recommendation with admin validation.
+
+  ## Examples
+
+      iex> create_nearby_place_admin(%{place_id: 1, nearby_place_name: "Austin", recommendation_reason: "Great music scene"})
+      {:ok, %PlaceNearby{}}
+
+  """
+  def create_nearby_place_admin(attrs \\ %{}) do
+    %PlaceNearby{}
+    |> PlaceNearby.admin_changeset(attrs)
+    |> maybe_calculate_distance()
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a nearby place recommendation.
+
+  ## Examples
+
+      iex> update_nearby_place(nearby_place, %{recommendation_reason: "Updated reason"})
+      {:ok, %PlaceNearby{}}
+
+      iex> update_nearby_place(nearby_place, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_nearby_place(%PlaceNearby{} = nearby_place, attrs) do
+    nearby_place
+    |> PlaceNearby.changeset(attrs)
+    |> maybe_calculate_distance()
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a nearby place recommendation.
+
+  ## Examples
+
+      iex> delete_nearby_place(nearby_place)
+      {:ok, %PlaceNearby{}}
+
+      iex> delete_nearby_place(nearby_place)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_nearby_place(%PlaceNearby{} = nearby_place) do
+    Repo.delete(nearby_place)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking nearby place changes.
+
+  ## Examples
+
+      iex> change_nearby_place(nearby_place)
+      %Ecto.Changeset{data: %PlaceNearby{}}
+
+  """
+  def change_nearby_place(%PlaceNearby{} = nearby_place, attrs \\ %{}) do
+    PlaceNearby.changeset(nearby_place, attrs)
+  end
+
+  @doc """
+  Finds nearby places for a given place with optional filtering.
+
+  ## Examples
+
+      iex> find_nearby_places_for(place_id, %{category: "day_trip", max_distance_km: 100})
+      [%PlaceNearby{}, ...]
+
+  """
+  def find_nearby_places_for(place_id, filters \\ %{}) do
+    from(pn in PlaceNearby,
+      where: pn.place_id == ^place_id and pn.is_active == true,
+      preload: [:place]
+    )
+    |> PlaceNearby.filter_by_criteria(Map.to_list(filters))
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets nearby places by recommendation category.
+
+  ## Examples
+
+      iex> get_nearby_places_by_category(place_id, "day_trip")
+      [%PlaceNearby{}, ...]
+
+  """
+  def get_nearby_places_by_category(place_id, category) do
+    from(pn in PlaceNearby,
+      where: pn.place_id == ^place_id and
+             pn.recommendation_category == ^category and
+             pn.is_active == true,
+      order_by: [asc: pn.sort_order, desc: pn.popularity_score],
+      preload: [:place]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Bulk insert nearby places recommendations.
+
+  ## Examples
+
+      iex> bulk_create_nearby_places([%{place_id: 1, nearby_place_name: "Austin", ...}, ...])
+      {2, nil}
+
+  """
+  def bulk_create_nearby_places(nearby_places_data) do
+    # Add timestamps and default values
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    places_with_timestamps = Enum.map(nearby_places_data, fn place_data ->
+      place_data
+      |> Map.put(:inserted_at, now)
+      |> Map.put(:updated_at, now)
+      |> Map.put_new(:is_active, true)
+      |> Map.put_new(:sort_order, 0)
+      |> Map.put_new(:verified, false)
+      |> Map.put_new(:source, "manual")
+    end)
+
+    Repo.insert_all(PlaceNearby, places_with_timestamps, on_conflict: :nothing)
+  end
+
+  @doc """
+  Search nearby places across all places by name or description.
+
+  ## Examples
+
+      iex> search_nearby_places("austin")
+      [%PlaceNearby{}, ...]
+
+  """
+  def search_nearby_places(query, limit \\ 20) do
+    normalized_query = "%#{String.downcase(String.trim(query))}%"
+
+    from(pn in PlaceNearby,
+      where: pn.is_active == true and
+             (ilike(pn.nearby_place_name, ^normalized_query) or
+              ilike(pn.description, ^normalized_query) or
+              ilike(pn.recommendation_reason, ^normalized_query)),
+      order_by: [desc: pn.popularity_score, asc: pn.nearby_place_name],
+      limit: ^limit,
+      preload: [:place]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Get nearby places within a distance range from a specific place.
+
+  ## Examples
+
+      iex> get_nearby_places_within_distance(place_id, 50, 200)
+      [%PlaceNearby{}, ...]
+
+  """
+  def get_nearby_places_within_distance(place_id, min_distance_km, max_distance_km) do
+    from(pn in PlaceNearby,
+      where: pn.place_id == ^place_id and
+             pn.is_active == true and
+             pn.distance_km >= ^min_distance_km and
+             pn.distance_km <= ^max_distance_km,
+      order_by: [asc: pn.distance_km, desc: pn.popularity_score],
+      preload: [:place]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Toggle active status of a nearby place.
+
+  ## Examples
+
+      iex> toggle_nearby_place_active(nearby_place)
+      {:ok, %PlaceNearby{}}
+
+  """
+  def toggle_nearby_place_active(%PlaceNearby{} = nearby_place) do
+    nearby_place
+    |> PlaceNearby.changeset(%{is_active: !nearby_place.is_active})
+    |> Repo.update()
+  end
+
+  @doc """
+  Get statistics for nearby places recommendations.
+
+  ## Examples
+
+      iex> get_nearby_places_stats()
+      %{total: 150, active: 140, categories: %{"day_trip" => 50, ...}}
+
+  """
+  def get_nearby_places_stats do
+    total_query = from(pn in PlaceNearby, select: count(pn.id))
+    active_query = from(pn in PlaceNearby, where: pn.is_active == true, select: count(pn.id))
+
+    categories_query = from(pn in PlaceNearby,
+      where: pn.is_active == true,
+      group_by: pn.recommendation_category,
+      select: {pn.recommendation_category, count(pn.id)}
+    )
+
+    place_types_query = from(pn in PlaceNearby,
+      where: pn.is_active == true,
+      group_by: pn.place_type,
+      select: {pn.place_type, count(pn.id)}
+    )
+
+    %{
+      total: Repo.one(total_query),
+      active: Repo.one(active_query),
+      categories: categories_query |> Repo.all() |> Enum.into(%{}),
+      place_types: place_types_query |> Repo.all() |> Enum.into(%{})
+    }
+  end
+
+  # Helper function to calculate distance if coordinates are provided
+  defp maybe_calculate_distance(changeset) do
+    place_id = Ecto.Changeset.get_field(changeset, :place_id)
+    nearby_lat = Ecto.Changeset.get_field(changeset, :latitude)
+    nearby_lng = Ecto.Changeset.get_field(changeset, :longitude)
+
+    if place_id && nearby_lat && nearby_lng do
+      case get_place(place_id) do
+        %Place{latitude: place_lat, longitude: place_lng} when not is_nil(place_lat) and not is_nil(place_lng) ->
+          distance = PlaceNearby.calculate_distance(place_lat, place_lng, nearby_lat, nearby_lng)
+          Ecto.Changeset.put_change(changeset, :distance_km, distance)
+
+        _ ->
+          changeset
+      end
+    else
+      changeset
+    end
   end
 end

@@ -174,7 +174,7 @@ defmodule RouteWiseApiWeb.PlacesJSON do
       location: location_data(place),
       rating: format_decimal(place.rating),
       price_level: place.price_level,
-      place_types: place.place_types,
+      categories: place.categories,
       photos: format_photos(place.photos),
       cached_at: place.cached_at,
       tripadvisor_url: place.tripadvisor_url
@@ -190,7 +190,7 @@ defmodule RouteWiseApiWeb.PlacesJSON do
       location: location_data(place),
       rating: format_decimal(place.rating),
       price_level: place.price_level,
-      place_types: place.place_types,
+      categories: place.categories,
       phone_number: place.phone_number,
       website: place.website,
       opening_hours: place.opening_hours,

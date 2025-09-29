@@ -327,7 +327,7 @@ defmodule RouteWiseApi.OSMPlaces do
         id: "osm_#{element["type"]}_#{element["id"]}",
         name: name,
         category: determine_category(tags),
-        place_types: extract_place_types(tags),
+        categories: extract_categories(tags),
         lat: lat,
         lng: lng,
         distance: distance,
@@ -358,7 +358,7 @@ defmodule RouteWiseApi.OSMPlaces do
     end
   end
 
-  defp extract_place_types(tags) do
+  defp extract_categories(tags) do
     types = []
     
     types = if tags["amenity"], do: [tags["amenity"] | types], else: types

@@ -187,7 +187,7 @@ defmodule Mix.Tasks.UpdatePoiDescriptions do
         # Update POI with LocationIQ description and data
         attrs = %{
           description: place.description,
-          place_types: [place.category] # Update category if available
+          categories: [place.category] # Update category if available
         }
         
         case update_poi(poi, attrs) do

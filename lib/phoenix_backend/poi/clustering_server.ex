@@ -355,7 +355,7 @@ defmodule RouteWiseApi.POI.ClusteringServer do
                            WHEN ? && ARRAY['lodging']::varchar[] THEN 'lodging'
                            WHEN ? && ARRAY['museum']::varchar[] THEN 'museum'
                            WHEN ? && ARRAY['natural_feature']::varchar[] THEN 'natural_feature'
-                           ELSE 'other' END", p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types, p.place_types),
+                           ELSE 'other' END", p.categories, p.categories, p.categories, p.categories, p.categories, p.categories, p.categories, p.categories, p.categories, p.categories, p.categories),
         rating: fragment("CAST(? AS FLOAT)", p.rating),
         reviews_count: coalesce(p.reviews_count, 0),
         formatted_address: p.formatted_address,
@@ -375,7 +375,7 @@ defmodule RouteWiseApi.POI.ClusteringServer do
     
     Enum.reduce(filters, query, fn
       {:categories, categories}, query when is_list(categories) ->
-        # For now, skip category filtering - Places has place_types array
+        # For now, skip category filtering - Places has categories array
         # Frontend can filter categories on the response
         query
       

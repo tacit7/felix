@@ -5,14 +5,14 @@ defmodule RouteWiseApi.Places.Place do
   @primary_key {:id, :id, autogenerate: true}
   @foreign_key_type :id
 
-  schema "places" do
+  schema "pois" do
     field :google_place_id, :string
     field :location_iq_place_id, :string
     field :name, :string
     field :formatted_address, :string
     field :latitude, :decimal
     field :longitude, :decimal
-    field :place_types, {:array, :string}
+    field :categories, {:array, :string}
     field :rating, :decimal
     field :price_level, :integer
     field :phone_number, :string
@@ -71,6 +71,12 @@ defmodule RouteWiseApi.Places.Place do
     field :image_processing_status, :string
     field :image_processing_error, :string
 
+    # Default placeholder image association
+    belongs_to :default_image, RouteWiseApi.Places.DefaultImage
+
+    # Nearby places recommendations
+    has_many :nearby_places, RouteWiseApi.Places.PlaceNearby, foreign_key: :place_id
+
     timestamps(type: :utc_datetime)
   end
 
@@ -80,16 +86,17 @@ defmodule RouteWiseApi.Places.Place do
   def changeset(place, attrs) do
     place
     |> cast(attrs, [
-      :google_place_id, :location_iq_place_id, :name, :formatted_address, 
-      :latitude, :longitude, :place_types, :rating, :price_level, :phone_number, 
-      :website, :opening_hours, :photos, :reviews_count, :google_data, 
+      :google_place_id, :location_iq_place_id, :name, :formatted_address,
+      :latitude, :longitude, :categories, :rating, :price_level, :phone_number,
+      :website, :opening_hours, :photos, :reviews_count, :google_data,
       :location_iq_data, :cached_at, :wiki_image, :tripadvisor_url, :tips,
       :hidden_gem, :hidden_gem_reason, :overrated, :overrated_reason,
       :tripadvisor_rating, :tripadvisor_review_count, :entry_fee, :best_time_to_visit,
       :accessibility, :duration_suggested, :related_places, :local_name, :wikidata_id,
       :curated, :image_data, :cached_image_original, :cached_image_thumb,
       :cached_image_medium, :cached_image_large, :cached_image_xlarge,
-      :images_cached_at, :image_processing_status, :image_processing_error
+      :images_cached_at, :image_processing_status, :image_processing_error,
+      :default_image_id
     ])
     |> validate_required([:name, :cached_at])
     |> validate_one_place_id()
@@ -110,16 +117,17 @@ defmodule RouteWiseApi.Places.Place do
     
     place
     |> cast(attrs, [
-      :google_place_id, :location_iq_place_id, :name, :formatted_address, 
-      :latitude, :longitude, :place_types, :rating, :price_level, :phone_number, 
-      :website, :opening_hours, :photos, :reviews_count, :google_data, 
+      :google_place_id, :location_iq_place_id, :name, :formatted_address,
+      :latitude, :longitude, :categories, :rating, :price_level, :phone_number,
+      :website, :opening_hours, :photos, :reviews_count, :google_data,
       :location_iq_data, :cached_at, :description, :wiki_image, :tripadvisor_url, :tips,
       :hidden_gem, :hidden_gem_reason, :overrated, :overrated_reason,
       :tripadvisor_rating, :tripadvisor_review_count, :entry_fee, :best_time_to_visit,
       :accessibility, :duration_suggested, :related_places, :local_name, :wikidata_id,
       :curated, :image_data, :cached_image_original, :cached_image_thumb,
       :cached_image_medium, :cached_image_large, :cached_image_xlarge,
-      :images_cached_at, :image_processing_status, :image_processing_error
+      :images_cached_at, :image_processing_status, :image_processing_error,
+      :default_image_id
     ])
     |> validate_required([:name, :cached_at])
     |> validate_one_place_id()
@@ -153,7 +161,7 @@ defmodule RouteWiseApi.Places.Place do
       formatted_address: google_data["formatted_address"],
       latitude: get_in(google_data, ["geometry", "location", "lat"]),
       longitude: get_in(google_data, ["geometry", "location", "lng"]),
-      place_types: google_data["types"] || [],
+      categories: google_data["types"] || [],
       rating: google_data["rating"],
       price_level: google_data["price_level"],
       phone_number: google_data["formatted_phone_number"],
@@ -176,7 +184,7 @@ defmodule RouteWiseApi.Places.Place do
       formatted_address: location_iq_data[:address] || location_iq_data["address"],
       latitude: parse_coordinate(location_iq_data[:lat] || location_iq_data["lat"]),
       longitude: parse_coordinate(location_iq_data[:lng] || location_iq_data["lng"]),
-      place_types: [location_iq_data[:category] || location_iq_data["category"] || "place"],
+      categories: [location_iq_data[:category] || location_iq_data["category"] || "place"],
       rating: nil, # LocationIQ doesn't provide ratings like Google
       price_level: nil, # LocationIQ doesn't provide price levels
       phone_number: nil, # Would need separate API call

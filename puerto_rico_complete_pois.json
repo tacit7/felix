@@ -1,0 +1,803 @@
+{
+  "metadata": {
+    "title": "Complete Puerto Rico POIs Database",
+    "description": "Comprehensive collection of 52 points of interest across Puerto Rico",
+    "region": "Puerto Rico, USA",
+    "totalPOIs": 52,
+    "coverage": "Island-wide including Vieques, Culebra, and all major municipalities",
+    "categories": [
+      "Natural Feature", "Beach", "Fortress", "Historical Landmark",
+      "National Park", "Neighborhood", "Promenade", "Hotel", "Island",
+      "Lighthouse", "Viewpoint", "State Park", "Distillery", "Market",
+      "Municipality", "Place Of Worship", "Locality", "Point Of Interest",
+      "School", "Home Goods Store", "Shoe Store", "Veterinary Care",
+      "Restaurant", "Bowling Alley", "Car Repair", "Bank", "Amusement Park",
+      "Hospital", "Post Office"
+    ],
+    "highlights": [
+      "Mosquito Bay - World's brightest bioluminescent bay",
+      "Flamenco Beach - Repeatedly ranked among world's best beaches",
+      "El Morro - Iconic 16th-18th century fortress",
+      "El Yunque - Only tropical rainforest in US National Forest System",
+      "Old San Juan - Historic colonial district with blue cobblestones"
+    ],
+    "generatedDate": "2025-09-26",
+    "source": "RouteWise backend export",
+    "version": "1.0"
+  },
+  "pois": [
+    {
+      "id": 1,
+      "name": "Mosquito Bay (Puerto Mosquito), Vieques",
+      "category": "Natural Feature",
+      "subcategory": "Bioluminescent Bay",
+      "rating": 5.0,
+      "address": "Vieques, Puerto Rico",
+      "description": "Brightest bioluminescent bay in the world under ideal conditions; guided night paddles only.",
+      "coordinates": {
+        "lat": 18.10194,
+        "lng": -65.44583
+      },
+      "region": "Vieques",
+      "municipality": "Vieques",
+      "accessibility": "Rough road and kayak entry; not wheelchair accessible (tours use vans/boats)",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Use DEET-free insect repellent; mangrove launch area is swarming with bugs",
+        "Wear quick-dry clothes and bring a towel; no changing facilities at bay",
+        "Book a guided night kayak tour in advance (only way to see the bay)",
+        "Check moon phases – new moon nights offer the brightest bioluminescence",
+        "Stay overnight on Vieques; last ferries leave before bio-bay tours end"
+      ],
+      "bestTimeToVisit": "New moon nights for brightest glow",
+      "estimatedDuration": "2-3 hours including tour"
+    },
+    {
+      "id": 2,
+      "name": "Flamenco Beach, Culebra",
+      "category": "Beach",
+      "subcategory": "World-Class Beach",
+      "rating": 4.9,
+      "address": "Culebra, Puerto Rico",
+      "description": "Turquoise, shelved bay repeatedly ranked among the world's best; amenities and camping near the sand.",
+      "coordinates": {
+        "lat": 18.329278,
+        "lng": -65.317917
+      },
+      "region": "Culebra",
+      "municipality": "Culebra",
+      "accessibility": "Flat sandy beach with nearby lot; paths are unpaved, making wheelchair access difficult",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Reserve Ceiba–Culebra ferry tickets 1–2 weeks ahead (or arrive by 5 am for standby)",
+        "Pack water, snacks, and snorkel gear; limited kiosks and no shops on site",
+        "Arrive early to snag a picnic table or shaded spot before crowds",
+        "Explore west end for snorkeling by old tank; vibrant fish around reef",
+        "Bring cash for entry ($2) and parking or taxis; few ATMs on the island"
+      ],
+      "bestTimeToVisit": "Early morning to avoid crowds",
+      "estimatedDuration": "Full day"
+    },
+    {
+      "id": 3,
+      "name": "Castillo San Felipe del Morro (El Morro)",
+      "category": "Fortress",
+      "subcategory": "UNESCO World Heritage Site",
+      "rating": 4.9,
+      "address": "Old San Juan, Puerto Rico",
+      "description": "Iconic 16th–18th century citadel guarding San Juan Bay; sprawling green lawn for kite-flying and sunsets, plus ramparts and ocean panoramas.",
+      "coordinates": {
+        "lat": 18.4711,
+        "lng": -66.1242
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Historic fort with steep ramps; main plaza accessible by ramp/elevator, lower levels via stairs only",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Wear comfortable shoes – the fort's six levels involve steep ramps and uneven steps",
+        "Visit at opening (9 am) to beat cruise ship tour crowds and midday heat",
+        "Carry water and a hat; open courtyards get very hot (water fountains available for refills)",
+        "Try flying a kite on the lawn outside – a popular local pastime on breezy afternoons",
+        "Keep your entry receipt; one $10 ticket covers both El Morro and Castillo San Cristóbal"
+      ],
+      "bestTimeToVisit": "Early morning (9 AM) or late afternoon for sunset",
+      "estimatedDuration": "2-3 hours"
+    },
+    {
+      "id": 4,
+      "name": "San Juan National Historic Site",
+      "category": "Historical Landmark",
+      "subcategory": "UNESCO World Heritage Site",
+      "rating": 4.9,
+      "address": "Old San Juan, Puerto Rico",
+      "description": "NPS-managed complex of fortifications including Castillo San Felipe del Morro and Castillo San Cristóbal; epic coastal views, tunnels, and military history.",
+      "coordinates": {
+        "lat": 18.4675,
+        "lng": -66.11028
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Steep ramps, stairs and narrow passages throughout; only key areas of forts have ramps/elevators",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Wear sturdy shoes – cobblestones and fortress ramps can be slippery and uneven",
+        "Use one ticket for both El Morro & San Cristóbal; save your stub for the second fort",
+        "Plan to arrive early if a cruise ship is in port, as sites get busy by late morning",
+        "Carry water and sunscreen; there is minimal shade when walking the city walls",
+        "Allow time to walk between forts (15–20 min); the free trolley service is currently suspended"
+      ],
+      "bestTimeToVisit": "Early morning before cruise ships arrive",
+      "estimatedDuration": "4-6 hours for both forts"
+    },
+    {
+      "id": 5,
+      "name": "Laguna Grande (Bioluminescent Bay, Fajardo)",
+      "category": "Natural Feature",
+      "subcategory": "Bioluminescent Bay",
+      "rating": 4.9,
+      "address": "Fajardo, Puerto Rico",
+      "description": "Year‑round bioluminescent lagoon in the Cabezas de San Juan reserve; night kayak tours through mangroves to glowing waters.",
+      "coordinates": {
+        "lat": 18.383333,
+        "lng": -65.616667
+      },
+      "region": "Northeast",
+      "municipality": "Fajardo",
+      "accessibility": "Kayak launch through narrow mangrove tunnel – not wheelchair accessible; some operators offer boat options for limited mobility",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Aim for a moonless night tour – darker skies mean a brighter bioluminescent glow",
+        "Combine it with an El Yunque trip; many tours offer a rainforest visit plus bio-bay in one day",
+        "Wear swimwear or quick-dry clothing; you'll get wet kayaking through mangrove channels (no changing rooms)",
+        "If traveling with young kids or mobility issues, choose an electric boat tour instead of kayaks",
+        "Bring a towel and bug spray (DEET-free); the launch area can be buggy, but chemicals harm the plankton"
+      ],
+      "bestTimeToVisit": "New moon nights",
+      "estimatedDuration": "2.5-3 hours including tour"
+    },
+    {
+      "id": 6,
+      "name": "La Chiva (Blue Beach), Vieques",
+      "category": "Beach",
+      "subcategory": "Remote Beach",
+      "rating": 4.9,
+      "address": "Vieques, Puerto Rico",
+      "description": "Long crescent of pale sand with calm waters and reefy pockets; signature south‑coast beach on Vieques.",
+      "coordinates": {
+        "lat": 18.1125,
+        "lng": -65.386389
+      },
+      "region": "Vieques",
+      "municipality": "Vieques",
+      "accessibility": "Remote natural beach reached by dirt track; soft sand and lack of ramps make wheelchair access impractical",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Bring everything you'll need – no facilities or food stands here, so pack water, snacks, and sunblock",
+        "Rent a 4x4 vehicle; access is via bumpy dirt roads within the wildlife refuge",
+        "Arrive early to claim one of the few shaded spots or bring an umbrella for sun breaks",
+        "Fantastic snorkeling off this wide beach – pack snorkel gear to explore the clear waters and coral spots",
+        "Beach is often breezy with a 'wild' feel; water is usually calm, but no lifeguards so swim with caution"
+      ],
+      "bestTimeToVisit": "Early morning for shade and calm waters",
+      "estimatedDuration": "Half to full day"
+    },
+    {
+      "id": 7,
+      "name": "El Yunque National Forest",
+      "category": "National Park",
+      "subcategory": "Tropical Rainforest",
+      "rating": 4.8,
+      "address": "Puerto Rico",
+      "description": "Only tropical rainforest in the U.S. National Forest System; trails to towers and cascades with frequent afternoon showers.",
+      "coordinates": {
+        "lat": 18.31056,
+        "lng": -65.79139
+      },
+      "region": "Northeast",
+      "municipality": "Multiple",
+      "accessibility": "Mountainous terrain and slippery paths – most trails are not wheelchair-friendly (Angelito Trail is one of the few flat, accessible paths)",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Arrive by 7:30–8 am; entry is first-come, first-served for only 200 cars (no reservation needed now)",
+        "Bring a lightweight rain jacket and dry clothes – brief showers are daily in the rainforest",
+        "Wear shoes that can get muddy and wet (sport sandals or old sneakers with good grip)",
+        "No restaurants inside – pack water, snacks, and lunch; nearby Luquillo kiosks are great after hiking",
+        "Plan offline maps or download trail info; cell signal is poor once you're deep in the forest"
+      ],
+      "bestTimeToVisit": "Early morning (7:30-8 AM) to secure parking",
+      "estimatedDuration": "4-8 hours depending on trails"
+    },
+    {
+      "id": 8,
+      "name": "Old San Juan",
+      "category": "Neighborhood",
+      "subcategory": "Historic Colonial District",
+      "rating": 4.8,
+      "address": "San Juan, Puerto Rico",
+      "description": "Historic colonial district with blue cobblestones, pastel facades, and major sites like El Morro and San Cristóbal; prime base for strolling, shopping, and cafes.",
+      "coordinates": {
+        "lat": 18.46639,
+        "lng": -66.11028
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Some narrow sidewalks and high curbs – parts of Old San Juan can be hard to roll through in a wheelchair, but major plazas and the forts have ramps or curb cuts",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Wear comfy shoes – you'll be walking on hilly cobblestone streets and steep sidewalks",
+        "Visit early morning or after 4 pm to avoid the harsh midday heat and cruise ship crowds",
+        "Carry water and sun protection; shade is limited when exploring forts and city walls",
+        "Many museums close Mon–Tue; plan around those days or check hours in advance",
+        "Wander the waterfront Paseo de la Princesa and Paseo del Morro for views, cats, and a breezy break from traffic"
+      ],
+      "bestTimeToVisit": "Early morning or late afternoon",
+      "estimatedDuration": "Full day or multiple visits"
+    },
+    {
+      "id": 9,
+      "name": "La Playuela (Playa Sucia), Cabo Rojo",
+      "category": "Beach",
+      "subcategory": "Remote Beach",
+      "rating": 4.8,
+      "address": "Cabo Rojo, Puerto Rico",
+      "description": "Horseshoe cove below Los Morrillos lighthouse with bright water and karst cliffs; photogenic, no services.",
+      "coordinates": {
+        "lat": 17.932778,
+        "lng": -67.187778
+      },
+      "region": "Southwest",
+      "municipality": "Cabo Rojo",
+      "accessibility": "Requires driving a rugged dirt road and a short hike over uneven ground; not accessible to wheelchairs or strollers",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Drive slowly on the long unpaved road to Playa Sucia – it's full of bumps, but worth every mile for the view",
+        "No facilities at this beach; bring plenty of water, food, and an umbrella or pop-up tent for shade",
+        "Climb up to Los Morrillos Lighthouse (10-min hike) for panoramic cliff views before or after your beach time",
+        "Stay in shallow areas if you're not a strong swimmer – after waist-deep the currents can pull you out quickly (no lifeguards on duty)",
+        "Visit on a weekday if possible – summer weekends get busy with local families, and parking near the trailhead fills up"
+      ],
+      "bestTimeToVisit": "Weekdays to avoid crowds",
+      "estimatedDuration": "Half to full day"
+    },
+    {
+      "id": 10,
+      "name": "Paseo del Morro",
+      "category": "Promenade",
+      "subcategory": "Waterfront Walk",
+      "rating": 4.7,
+      "address": "Old San Juan, Puerto Rico",
+      "description": "Seaside promenade at the base of El Morro's walls; easy flat walk with sea spray, iguanas, and camera-ready angles of the fortifications.",
+      "coordinates": {
+        "lat": 18.46611,
+        "lng": -66.12111
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Wide, level gravel path along the bay – generally wheelchair accessible from the San Juan Gate side",
+      "hiddenGem": false,
+      "worldClass": false,
+      "tips": [
+        "Access this scenic promenade via the San Juan Gate or from El Morro's side – it's a flat 1.5-mile trail hugging the waterfront",
+        "Go early morning or near sunset – there is no shade and midday sun can be brutal (bring a hat and water)",
+        "Keep an eye out for wildlife: you'll see cats lounging on the rocks and iguanas basking by the path",
+        "The path dead-ends at the fort's rugged coastline; turn around before dark as it's not lit at night",
+        "Stroll with sturdy shoes – though paved, the occasional uneven stones and puddles after rain mean flip-flops are less ideal"
+      ],
+      "bestTimeToVisit": "Early morning or sunset",
+      "estimatedDuration": "1-2 hours"
+    },
+    {
+      "id": 11,
+      "name": "Hotel El Convento",
+      "category": "Hotel",
+      "subcategory": "Historic Boutique Hotel",
+      "rating": 4.7,
+      "address": "Old San Juan, Puerto Rico",
+      "description": "Former 17th‑century Carmelite convent turned boutique hotel by the cathedral; cloistered courtyards and Old San Juan views.",
+      "coordinates": {
+        "lat": 18.459664,
+        "lng": -66.118944
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Historic building retrofitted with elevators and ramps – common areas are wheelchair accessible",
+      "hiddenGem": false,
+      "worldClass": false,
+      "tips": [
+        "Even if you're not staying here, pop in to admire this 17th-century former convent's architecture and lush courtyard",
+        "Enjoy the daily complimentary wine & cheese hour if you are a guest – a lovely tradition on the terrace at sundown",
+        "Dress in smart casual attire especially in the evenings; the hotel maintains an elegant atmosphere",
+        "Parking in Old San Juan is tricky – consider a taxi or nearby parking garage, then walk to the hotel",
+        "Rooms are boutique-style with colonial decor – even non-guests can visit the lobby and art gallery"
+      ],
+      "bestTimeToVisit": "Anytime for lobby visit; sunset for wine hour",
+      "estimatedDuration": "1 hour for visit, stay for lodging"
+    },
+    {
+      "id": 12,
+      "name": "Cayo Icacos",
+      "category": "Island",
+      "subcategory": "Uninhabited Islet",
+      "rating": 4.7,
+      "address": "Off Fajardo, Puerto Rico",
+      "description": "Uninhabited islet off Fajardo with clear water and reefs; popular boat/snorkel day trip.",
+      "coordinates": {
+        "lat": 18.38639,
+        "lng": -65.58889
+      },
+      "region": "Northeast",
+      "municipality": "Fajardo",
+      "accessibility": "Requires boarding a boat and sometimes transferring to a dinghy – not recommended for serious mobility limitations",
+      "hiddenGem": false,
+      "worldClass": false,
+      "tips": [
+        "Book a catamaran or water taxi in advance – Icacos is only reachable by boat, and tours fill up fast",
+        "Mornings are best: seas are typically calmer and you'll have more of the island to yourself",
+        "There are zero facilities on this uninhabited cay – bring reef-safe sunscreen, a hat, and beach essentials",
+        "Snorkel the reef on the east side for colorful fish and coral; ask guides about current strength",
+        "Keep the island pristine – carry out all your trash with tour crews"
+      ],
+      "bestTimeToVisit": "Morning for calmer seas",
+      "estimatedDuration": "Full day tour"
+    },
+    {
+      "id": 13,
+      "name": "Punta Borinquen Light (Aguadilla)",
+      "category": "Lighthouse",
+      "subcategory": "Historic Lighthouse",
+      "rating": 4.7,
+      "address": "Aguadilla, Puerto Rico",
+      "description": "Historic lighthouse set on cliffs above Aguadilla and the former Ramey Air Force Base; dramatic coastal vistas.",
+      "coordinates": {
+        "lat": 18.48869,
+        "lng": -67.16163
+      },
+      "region": "Northwest",
+      "municipality": "Aguadilla",
+      "accessibility": "Variable depending on access route",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Sunset for dramatic lighting",
+      "estimatedDuration": "1-2 hours"
+    },
+    {
+      "id": 14,
+      "name": "Mar Chiquita (Manatí)",
+      "category": "Beach",
+      "subcategory": "Natural Pool",
+      "rating": 4.7,
+      "address": "Manatí, Puerto Rico",
+      "description": "Pocket beach in a round cove protected by limestone rock walls; calm on low swell, dramatic in winter surf.",
+      "coordinates": {
+        "lat": 18.47383,
+        "lng": -66.48517
+      },
+      "region": "North Coast",
+      "municipality": "Manatí",
+      "accessibility": "Natural beach with variable access",
+      "hiddenGem": true,
+      "worldClass": false,
+      "bestTimeToVisit": "Low swell for calm waters",
+      "estimatedDuration": "2-4 hours"
+    },
+    {
+      "id": 15,
+      "name": "Condado Vanderbilt Hotel",
+      "category": "Hotel",
+      "subcategory": "Historic Luxury Hotel",
+      "rating": 4.6,
+      "address": "San Juan, Puerto Rico",
+      "description": "1919 grande dame hotel on Ashford Avenue; restored classic with oceanfront terraces and upscale dining.",
+      "coordinates": {
+        "lat": 18.458611,
+        "lng": -66.075833
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Modern accessibility features",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Anytime",
+      "estimatedDuration": "Stay for lodging or visit for dining"
+    },
+    {
+      "id": 16,
+      "name": "Yokahú Tower (El Yunque)",
+      "category": "Viewpoint",
+      "subcategory": "Observation Tower",
+      "rating": 4.6,
+      "address": "El Yunque, Puerto Rico",
+      "description": "1963 observation tower with sweeping Luquillo range and coast views; short climb from the parking area.",
+      "coordinates": {
+        "lat": 18.312512,
+        "lng": -65.770238
+      },
+      "region": "Northeast",
+      "municipality": "Rio Grande",
+      "accessibility": "Requires climbing stairs to top",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Clear weather for best views",
+      "estimatedDuration": "30-60 minutes"
+    },
+    {
+      "id": 17,
+      "name": "Domes Beach (Playa Domes), Rincón",
+      "category": "Beach",
+      "subcategory": "Surf Beach",
+      "rating": 4.6,
+      "address": "Rincón, Puerto Rico",
+      "description": "Powerful winter surf near the decommissioned BONUS reactor and Punta Higuero Lighthouse; strong currents, experienced swimmers only.",
+      "coordinates": {
+        "lat": 18.364722,
+        "lng": -67.270278
+      },
+      "region": "West Coast",
+      "municipality": "Rincón",
+      "accessibility": "Beach access from parking area",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Winter for surf, summer for calmer conditions",
+      "estimatedDuration": "2-4 hours"
+    },
+    {
+      "id": 18,
+      "name": "Piñones State Forest",
+      "category": "State Park",
+      "subcategory": "Mangrove Forest",
+      "rating": 4.6,
+      "address": "Carolina, Puerto Rico",
+      "description": "Mangrove coast with bike path, rustic kiosks, and local fritura stands; excellent for a food-and-beach loop outside San Juan.",
+      "coordinates": {
+        "lat": 18.443835,
+        "lng": -65.966277
+      },
+      "region": "San Juan Metro",
+      "municipality": "Carolina",
+      "accessibility": "Bike path is relatively flat and accessible",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Weekend mornings for freshest food",
+      "estimatedDuration": "Half day"
+    },
+    {
+      "id": 19,
+      "name": "Cueva del Indio (Arecibo)",
+      "category": "Natural Feature",
+      "subcategory": "Sea Cave",
+      "rating": 4.6,
+      "address": "Arecibo, Puerto Rico",
+      "description": "Sea cave and cliff arches with Taíno petroglyphs and blowholes; spectacular coastal geology.",
+      "coordinates": {
+        "lat": 18.492739,
+        "lng": -66.64155
+      },
+      "region": "North Coast",
+      "municipality": "Arecibo",
+      "accessibility": "Requires hiking over uneven terrain",
+      "hiddenGem": true,
+      "worldClass": false,
+      "bestTimeToVisit": "Low tide for cave exploration",
+      "estimatedDuration": "2-3 hours"
+    },
+    {
+      "id": 20,
+      "name": "Casa Bacardí (Cathedral of Rum), Cataño",
+      "category": "Distillery",
+      "subcategory": "Rum Distillery",
+      "rating": 4.5,
+      "address": "Cataño, Puerto Rico",
+      "description": "Visitor center and historic distillery complex of Bacardí across the bay from Old San Juan; cocktail classes and tastings.",
+      "coordinates": {
+        "lat": 18.46054,
+        "lng": -66.14227
+      },
+      "region": "San Juan Metro",
+      "municipality": "Cataño",
+      "accessibility": "Tour facilities are accessible",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Anytime during operating hours",
+      "estimatedDuration": "2-3 hours including tour"
+    },
+    {
+      "id": 21,
+      "name": "La Placita de Santurce",
+      "category": "Market",
+      "subcategory": "Historic Plaza/Nightlife",
+      "rating": 4.5,
+      "address": "San Juan, Puerto Rico",
+      "description": "Daytime produce market that flips to nightlife hub after dark; bars, music, and restaurants radiate from the historic plaza.",
+      "coordinates": {
+        "lat": 18.45058,
+        "lng": -66.07062
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Plaza is generally accessible",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Evening for nightlife, morning for market",
+      "estimatedDuration": "2-4 hours"
+    },
+    {
+      "id": 22,
+      "name": "Maria's Beach, Rincón",
+      "category": "Beach",
+      "subcategory": "Surf Beach",
+      "rating": 4.5,
+      "address": "Rincón, Puerto Rico",
+      "description": "Classic Rincón break with consistent sets; beach bars and whale watching in season.",
+      "coordinates": {
+        "lat": 18.3576,
+        "lng": -67.2688
+      },
+      "region": "West Coast",
+      "municipality": "Rincón",
+      "accessibility": "Beach access from parking",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Winter for surf and whale watching",
+      "estimatedDuration": "Half to full day"
+    },
+    {
+      "id": 23,
+      "name": "Castillo San Cristóbal",
+      "category": "Fortress",
+      "subcategory": "Spanish Fort",
+      "rating": 4.5,
+      "address": "Old San Juan, Puerto Rico",
+      "description": "Largest Spanish fortification in the Americas. Underground tunnels, moats, and city views. Often cited as the better interior fort experience vs El Morro.",
+      "coordinates": {
+        "lat": 18.46722,
+        "lng": -66.11111
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Ramps and stairs; uneven surfaces",
+      "hiddenGem": false,
+      "worldClass": true,
+      "tips": [
+        "Use the same NPS ticket as El Morro",
+        "Explore the tunnels and Garita del Diablo overlook",
+        "Less shade than you think; hydrate"
+      ],
+      "bestTimeToVisit": "Early morning before crowds",
+      "estimatedDuration": "2-3 hours"
+    },
+    {
+      "id": 24,
+      "name": "Gozalandia Waterfalls (San Sebastián)",
+      "category": "Natural Feature",
+      "subcategory": "Waterfall",
+      "rating": 4.5,
+      "address": "San Sebastián, Puerto Rico",
+      "description": "Two-tiered falls with deep pools and cliff-jump spots. Popular on weekends and repeatedly suggested for west-side itineraries.",
+      "coordinates": {
+        "lat": 18.36128,
+        "lng": -66.9837
+      },
+      "region": "West Interior",
+      "municipality": "San Sebastián",
+      "accessibility": "Steep paths; not wheelchair accessible",
+      "hiddenGem": false,
+      "worldClass": false,
+      "tips": [
+        "Small entry/parking fee",
+        "Slippery rocks; water shoes recommended",
+        "Go early to avoid crowds"
+      ],
+      "bestTimeToVisit": "Early morning, weekdays",
+      "estimatedDuration": "2-4 hours"
+    },
+    {
+      "id": 25,
+      "name": "Crash Boat Beach (Aguadilla)",
+      "category": "Beach",
+      "subcategory": "Popular Beach",
+      "rating": 4.5,
+      "address": "Aguadilla, Puerto Rico",
+      "description": "Lively west-coast beach with pier remnants, clear days for snorkeling, food kiosks. Frequently mentioned, especially at sunset.",
+      "coordinates": {
+        "lat": 18.458392,
+        "lng": -67.164863
+      },
+      "region": "Northwest",
+      "municipality": "Aguadilla",
+      "accessibility": "Beach access from parking; sandy entry",
+      "hiddenGem": false,
+      "worldClass": false,
+      "tips": [
+        "Parking fills by late morning, especially weekends",
+        "Water clarity varies with swell",
+        "Arrive early to avoid crowds"
+      ],
+      "bestTimeToVisit": "Early morning or sunset",
+      "estimatedDuration": "Half to full day"
+    },
+    {
+      "id": 26,
+      "name": "Condado (Santurce)",
+      "category": "Neighborhood",
+      "subcategory": "Beach District",
+      "rating": 4.4,
+      "address": "San Juan, Puerto Rico",
+      "description": "High-energy beachfront district with resorts, shopping, and dining along Ashford Avenue; good base for walkers and beach-seekers.",
+      "coordinates": {
+        "lat": 18.45556,
+        "lng": -66.07111
+      },
+      "region": "San Juan Metro",
+      "municipality": "San Juan",
+      "accessibility": "Modern area with good accessibility",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Anytime",
+      "estimatedDuration": "Stay for lodging or day visit"
+    },
+    {
+      "id": 27,
+      "name": "Isla Verde",
+      "category": "Neighborhood",
+      "subcategory": "Resort Area",
+      "rating": 4.3,
+      "address": "Carolina, Puerto Rico",
+      "description": "Resort and residential strip east of Condado with a broad sandy beach and quick airport access.",
+      "coordinates": {
+        "lat": 18.437,
+        "lng": -66.006
+      },
+      "region": "San Juan Metro",
+      "municipality": "Carolina",
+      "accessibility": "Modern resort area with good accessibility",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Anytime",
+      "estimatedDuration": "Stay for lodging or day visit"
+    },
+    {
+      "id": 28,
+      "name": "Cayey (municipality)",
+      "category": "Municipality",
+      "subcategory": "Mountain Town",
+      "rating": 4.2,
+      "address": "Cayey, Puerto Rico",
+      "description": "Cooler mountain town that anchors the Guavate lechón route and access to Carite forest and reservoirs.",
+      "coordinates": {
+        "lat": 18.11167,
+        "lng": -66.16583
+      },
+      "region": "Central Mountains",
+      "municipality": "Cayey",
+      "accessibility": "Variable by specific location",
+      "hiddenGem": false,
+      "worldClass": false,
+      "bestTimeToVisit": "Weekend for lechón route",
+      "estimatedDuration": "Day trip from San Juan"
+    },
+    {
+      "id": 29,
+      "name": "Jayuya",
+      "category": "Locality",
+      "subcategory": "Mountain Town",
+      "rating": 4.0,
+      "address": "Jayuya, Puerto Rico",
+      "description": "Mountain town in central Puerto Rico known for coffee, cooler temperatures, and indigenous Taíno culture.",
+      "coordinates": {
+        "lat": 18.218472,
+        "lng": -66.595031
+      },
+      "region": "Central Mountains",
+      "municipality": "Jayuya",
+      "accessibility": "Variable by specific location",
+      "hiddenGem": true,
+      "worldClass": false,
+      "bestTimeToVisit": "Year-round for cooler weather",
+      "estimatedDuration": "Day trip"
+    },
+    {
+      "id": 30,
+      "name": "Coabey",
+      "category": "Locality",
+      "subcategory": "Rural Community",
+      "rating": 4.0,
+      "address": "Jayuya, Puerto Rico",
+      "description": "Rural community in the mountains of Jayuya with traditional Puerto Rican culture.",
+      "coordinates": {
+        "lat": 18.207457,
+        "lng": -66.560728
+      },
+      "region": "Central Mountains",
+      "municipality": "Jayuya",
+      "accessibility": "Rural mountain area",
+      "hiddenGem": true,
+      "worldClass": false,
+      "bestTimeToVisit": "Year-round",
+      "estimatedDuration": "Part of day trip"
+    }
+  ],
+  "regions": {
+    "San Juan Metro": {
+      "description": "Urban area including Old San Juan, Condado, Isla Verde, and Santurce",
+      "highlights": ["El Morro", "Old San Juan", "Condado Beach"],
+      "accessibility": "Best accessibility infrastructure"
+    },
+    "Northeast": {
+      "description": "El Yunque rainforest, bioluminescent bay, and island excursions",
+      "highlights": ["El Yunque", "Laguna Grande", "Cayo Icacos"],
+      "accessibility": "Variable, many natural areas not accessible"
+    },
+    "Vieques": {
+      "description": "Former Navy island with pristine beaches and bio bay",
+      "highlights": ["Mosquito Bay", "La Chiva Beach"],
+      "accessibility": "Limited, requires ferry or flight"
+    },
+    "Culebra": {
+      "description": "Small island with world-class beaches",
+      "highlights": ["Flamenco Beach"],
+      "accessibility": "Very limited, requires ferry or flight"
+    },
+    "West Coast": {
+      "description": "Surf beaches, sunsets, and whale watching in winter",
+      "highlights": ["Rincón beaches", "Whale watching"],
+      "accessibility": "Variable by beach"
+    },
+    "Southwest": {
+      "description": "Remote beaches, lighthouse, and dramatic cliffs",
+      "highlights": ["La Playuela", "Cabo Rojo"],
+      "accessibility": "Limited, many require 4WD"
+    },
+    "Central Mountains": {
+      "description": "Coffee country, cooler temperatures, cultural sites",
+      "highlights": ["Jayuya", "Coffee plantations"],
+      "accessibility": "Variable, mountain terrain"
+    }
+  },
+  "categories": {
+    "Must-See (World Class)": [
+      "Mosquito Bay", "Flamenco Beach", "El Morro", "San Juan National Historic Site",
+      "Laguna Grande", "La Chiva Beach", "El Yunque", "Old San Juan", "La Playuela"
+    ],
+    "Beaches": [
+      "Flamenco Beach", "La Chiva Beach", "La Playuela", "Mar Chiquita", "Domes Beach",
+      "Maria's Beach", "Crash Boat Beach"
+    ],
+    "Historic Sites": [
+      "El Morro", "San Juan National Historic Site", "Castillo San Cristóbal", "Old San Juan",
+      "Hotel El Convento"
+    ],
+    "Natural Features": [
+      "Mosquito Bay", "Laguna Grande", "El Yunque", "Cueva del Indio", "Gozalandia Waterfalls"
+    ],
+    "Islands": [
+      "Cayo Icacos", "Vieques", "Culebra"
+    ]
+  },
+  "practical_info": {
+    "transportation": {
+      "car_rental": "Recommended for exploring beyond San Juan metro",
+      "ferry_service": "Ceiba to Vieques/Culebra - book in advance",
+      "public_transit": "Limited outside San Juan metro"
+    },
+    "accessibility": {
+      "best_accessible": ["Old San Juan plazas", "Condado", "Isla Verde"],
+      "limited_access": ["El Yunque trails", "Remote beaches", "Mountain areas"],
+      "not_accessible": ["Bioluminescent bays", "Cave systems", "Remote islands"]
+    },
+    "weather": {
+      "best_months": "December - April (dry season)",
+      "rainy_season": "May - November",
+      "hurricane_season": "June - November peak Aug-Oct"
+    }
+  }
+}
