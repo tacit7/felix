@@ -8,24 +8,60 @@ defmodule RouteWiseApi.Trips.POI do
   schema "pois" do
     field :name, :string
     field :description, :string
-    field :category, :string
+    field :categories, {:array, :string}, default: []
     field :rating, :decimal
-    field :review_count, :integer
-    field :time_from_start, :string
-    field :image_url, :string
-    field :place_id, :string
-    field :address, :string
+    field :reviews_count, :integer
+    field :google_place_id, :string
+    field :formatted_address, :string
     field :price_level, :integer
     field :is_open, :boolean
     field :latitude, :float
     field :longitude, :float
-    
+
     # Enriched POI fields
     field :tips, {:array, :string}, default: []
     field :best_time_to_visit, :string
     field :duration_suggested, :string
     field :accessibility, :string
     field :entry_fee, :string
+
+    # Additional database fields
+    field :photos, {:array, :map}, default: []
+    field :opening_hours, :map
+    field :phone_number, :string
+    field :website, :string
+    field :popularity_score, :integer
+    field :curated, :boolean, default: false
+    field :hidden_gem, :boolean, default: false
+    field :hidden_gem_reason, :string
+    field :overrated, :boolean, default: false
+    field :overrated_reason, :string
+    field :tripadvisor_rating, :decimal
+    field :tripadvisor_review_count, :integer
+    field :tripadvisor_url, :string
+    field :wiki_image, :string
+    field :wikidata_id, :string
+    field :local_name, :string
+    field :related_places, {:array, :string}, default: []
+    field :google_data, :map
+    field :location_iq_data, :map
+    field :location_iq_place_id, :string
+    field :cached_at, :utc_datetime
+    field :last_updated, :utc_datetime
+
+    # Image processing fields
+    field :image_data, :map
+    field :image_processing_status, :string
+    field :image_processing_error, :string
+    field :cached_image_thumb, :string
+    field :cached_image_medium, :string
+    field :cached_image_large, :string
+    field :cached_image_xlarge, :string
+    field :cached_image_original, :string
+    field :images_cached_at, :utc_datetime
+
+    # Default image association
+    belongs_to :default_image, RouteWiseApi.Places.DefaultImage
 
     timestamps(type: :utc_datetime)
   end
@@ -36,21 +72,25 @@ defmodule RouteWiseApi.Trips.POI do
   def changeset(poi, attrs) do
     poi
     |> cast(attrs, [
-      :name, :description, :category, :rating, :review_count,
-      :time_from_start, :image_url, :place_id, :address,
+      :name, :description, :categories, :rating, :reviews_count,
+      :google_place_id, :formatted_address,
       :price_level, :is_open, :latitude, :longitude,
-      :tips, :best_time_to_visit, :duration_suggested, 
-      :accessibility, :entry_fee
+      :tips, :best_time_to_visit, :duration_suggested,
+      :accessibility, :entry_fee, :default_image_id,
+      :photos, :opening_hours, :phone_number, :website,
+      :popularity_score, :curated, :hidden_gem, :hidden_gem_reason,
+      :overrated, :overrated_reason, :tripadvisor_rating,
+      :tripadvisor_review_count, :tripadvisor_url, :wiki_image,
+      :wikidata_id, :local_name, :related_places, :google_data,
+      :location_iq_data, :location_iq_place_id, :cached_at, :last_updated
     ])
-    |> validate_required([:name, :description, :category, :rating, :review_count, :time_from_start, :image_url, :latitude, :longitude])
+    |> validate_required([:name, :description, :categories, :rating, :reviews_count, :latitude, :longitude])
     |> validate_length(:name, min: 1, max: 255)
-    |> validate_length(:category, min: 1, max: 100)
     |> validate_number(:rating, greater_than_or_equal_to: 0, less_than_or_equal_to: 5)
-    |> validate_number(:review_count, greater_than_or_equal_to: 0)
+    |> validate_number(:reviews_count, greater_than_or_equal_to: 0)
     |> validate_number(:price_level, greater_than_or_equal_to: 0, less_than_or_equal_to: 4)
     |> validate_number(:latitude, greater_than_or_equal_to: -90, less_than_or_equal_to: 90)
     |> validate_number(:longitude, greater_than_or_equal_to: -180, less_than_or_equal_to: 180)
-    |> validate_format(:image_url, ~r/^https?:\/\//, message: "must be a valid URL")
   end
 
   @doc """
@@ -78,7 +118,7 @@ defmodule RouteWiseApi.Trips.POI do
     # Map Google Place types to our POI categories
     category_mapping = %{
       "restaurant" => "restaurant",
-      "food" => "restaurant", 
+      "food" => "restaurant",
       "meal_takeaway" => "restaurant",
       "tourist_attraction" => "attraction",
       "point_of_interest" => "attraction",
@@ -89,13 +129,15 @@ defmodule RouteWiseApi.Trips.POI do
       "store" => "market",
       "lodging" => "historic",
       "church" => "historic",
-      "cemetery" => "historic"
+      "cemetery" => "historic",
+      "bioluminescent_bay" => "bioluminescent",
+      "bioluminescent bay" => "bioluminescent"
     }
-    
-    primary_type = Enum.find(types, fn type -> 
-      Map.has_key?(category_mapping, type) 
+
+    primary_type = Enum.find(types, fn type ->
+      Map.has_key?(category_mapping, type)
     end)
-    
+
     category_mapping[primary_type] || "attraction"
   end
   defp get_primary_category(_), do: "attraction"

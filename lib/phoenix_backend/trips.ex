@@ -6,7 +6,8 @@ defmodule RouteWiseApi.Trips do
   import Ecto.Query, warn: false
   alias RouteWiseApi.Repo
 
-  alias RouteWiseApi.Trips.{Trip, InterestCategory, UserInterest, POI, TripCollaborator, TripActivity}
+  alias RouteWiseApi.Trips.{Trip, InterestCategory, UserInterest, TripCollaborator, TripActivity}
+  alias RouteWiseApi.Places.Place, as: POI
 
   require Logger
 
@@ -267,7 +268,9 @@ defmodule RouteWiseApi.Trips do
   Returns the list of POIs.
   """
   def list_pois do
-    Repo.all(POI)
+    POI
+    |> preload(:default_image)
+    |> Repo.all()
   end
 
   @doc """
@@ -277,18 +280,27 @@ defmodule RouteWiseApi.Trips do
     POI
     |> where([p], p.category == ^category)
     |> order_by([p], desc: p.rating)
+    |> preload(:default_image)
     |> Repo.all()
   end
 
   @doc """
   Gets a single POI.
   """
-  def get_poi!(id), do: Repo.get!(POI, id)
+  def get_poi!(id) do
+    POI
+    |> preload(:default_image)
+    |> Repo.get!(id)
+  end
 
   @doc """
   Gets a single POI.
   """
-  def get_poi(id), do: Repo.get(POI, id)
+  def get_poi(id) do
+    POI
+    |> preload(:default_image)
+    |> Repo.get(id)
+  end
 
   @doc """
   Creates a POI.

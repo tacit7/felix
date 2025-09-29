@@ -485,22 +485,76 @@ defmodule RouteWiseApi.POIFormatterService do
 
   defp get_default_image_url(poi) do
     categories = get_poi_categories(poi)
-    # Normalize categories to lowercase for case-insensitive matching
-    normalized_categories = Enum.map(categories, &String.downcase/1)
-    RouteWiseApi.Places.DefaultImageService.get_default_image_url(normalized_categories)
+    # Normalize categories to match database format (lowercase with underscores)
+    normalized_categories = Enum.map(categories, fn category ->
+      category
+      |> String.downcase()
+      |> String.replace(" ", "_")
+    end)
+    # Prioritize categories before lookup
+    prioritized_categories = prioritize_categories(normalized_categories)
+    RouteWiseApi.Places.DefaultImageService.get_default_image_url(prioritized_categories)
   end
 
   defp get_primary_category(categories) when is_list(categories) do
-    # Get the category that has a matching default image, or fall back to first category
-    # Normalize categories to lowercase for case-insensitive matching
-    normalized_categories = Enum.map(categories, &String.downcase/1)
-    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(normalized_categories) do
+    # Get the category that has a matching default image, using priority order
+    # Normalize categories to match database format (lowercase with underscores)
+    normalized_categories = Enum.map(categories, fn category ->
+      category
+      |> String.downcase()
+      |> String.replace(" ", "_")
+    end)
+
+    # Sort categories by priority (most specific/important first)
+    prioritized_categories = prioritize_categories(normalized_categories)
+
+    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(prioritized_categories) do
       %{category: category} when not is_nil(category) -> category
       _ -> List.first(categories) || "establishment"
     end
   end
 
   defp get_primary_category(_), do: "establishment"
+
+  defp prioritize_categories(categories) do
+    # Define category priority (higher priority = more specific/important)
+    priority_map = %{
+      # Very specific/unique categories (highest priority)
+      "bioluminescent_bay" => 100,
+      "lighthouse" => 95,
+      "viewpoint" => 90,
+      "waterfall" => 85,
+
+      # Specific location types
+      "national_park" => 80,
+      "state_park" => 75,
+      "historic_site" => 70,
+      "museum" => 65,
+
+      # Activity/feature specific
+      "restaurant" => 60,
+      "hotel" => 55,
+      "shopping" => 50,
+
+      # Geographic features (lower priority, more general)
+      "island" => 45,
+      "beach" => 40,
+      "mountain" => 35,
+      "forest" => 30,
+      "natural_feature" => 20,  # Very general, low priority
+
+      # Generic categories (lowest priority)
+      "attraction" => 10,
+      "establishment" => 5,
+      "point_of_interest" => 1
+    }
+
+    categories
+    |> Enum.sort_by(fn category ->
+      # Get priority (default to 0 if not in map), then sort descending (highest first)
+      -(Map.get(priority_map, category, 0))
+    end)
+  end
   
   defp get_opening_status(poi) do
     case Map.get(poi, :opening_hours) do
@@ -581,10 +635,16 @@ defmodule RouteWiseApi.POIFormatterService do
   defp get_category_based_default_image(poi) do
     categories = get_poi_categories(poi)
 
-    # Normalize categories to lowercase for case-insensitive matching
-    normalized_categories = Enum.map(categories, &String.downcase/1)
+    # Normalize categories to match database format (lowercase with underscores)
+    normalized_categories = Enum.map(categories, fn category ->
+      category
+      |> String.downcase()
+      |> String.replace(" ", "_")
+    end)
 
-    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(normalized_categories) do
+    # Prioritize categories before lookup
+    prioritized_categories = prioritize_categories(normalized_categories)
+    case RouteWiseApi.Places.DefaultImageService.find_best_default_image(prioritized_categories) do
       %RouteWiseApi.Places.DefaultImage{} = default_image ->
         %{
           id: default_image.id,
